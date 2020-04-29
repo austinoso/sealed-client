@@ -1,6 +1,7 @@
 const initialState = {
 	username: localStorage.username ? localStorage.username : null,
 	chats: [],
+	contacts: {},
 };
 
 export default function userInfoReducer(state = initialState, action) {
@@ -14,6 +15,24 @@ export default function userInfoReducer(state = initialState, action) {
 			return {
 				...state,
 				chats: action.payload,
+			};
+		case 'ADD_CHAT':
+			return {
+				...state,
+				chats: [...state.chats, action.payload],
+			};
+		case 'REMOVE_CHAT':
+			return {
+				...state,
+				chats: state.chats.splice(
+					state.chats.findIndex((chat) => chat.id === action.payload.id) - 1,
+					1
+				),
+			};
+		case 'SET_CONTACTS':
+			return {
+				...state,
+				contacts: action.payload,
 			};
 		default:
 			return state;

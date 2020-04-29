@@ -1,7 +1,7 @@
 import './App.css';
 import React from 'react';
 import { Switch, Route, Link } from 'react-router-dom';
-import ChatsList from './containers/ChatsList';
+import Main from './scenes/Main';
 import Register from './scenes/Register';
 import Login from './scenes/Login';
 
@@ -24,7 +24,7 @@ function App() {
 				</Route>
 				<Route
 					path="/app"
-					render={(routerProps) => <ChatsList {...routerProps} />}
+					render={(routerProps) => <Main {...routerProps} />}
 				></Route>
 				<Route exact path="/register">
 					<Register />

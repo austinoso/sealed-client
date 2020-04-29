@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import { setChatsState } from '../actions/chats';
+import { setChatsState } from '../redux/actions/chats';
 
-import Contacts from './Contacts';
-import Chat from './Chat';
+import Contacts from '../containers/Contacts';
+import Chat from '../containers/Chat';
 
 import { API_ROOT } from '../constants/index';
 
-function ChatsList({ match, chats, setChats }) {
+function Main({ match, chats, setChats }) {
 	useEffect(() => {
 		fetch(`${API_ROOT}/users/${localStorage.userId}`)
 			.then((r) => r.json())
@@ -38,12 +38,13 @@ function ChatsList({ match, chats, setChats }) {
 					</div>
 				) : null}
 			</div>
-
-			<Route
-				exact
-				path={`${match.url}/:chatId`}
-				render={(routerProps) => <Chat {...routerProps} />}
-			/>
+			<div className="chat-section">
+				<Route
+					exact
+					path={`${match.url}/:chatId`}
+					render={(routerProps) => <Chat {...routerProps} />}
+				/>
+			</div>
 		</div>
 	);
 }
@@ -62,4 +63,4 @@ const mapDispatchToProps = (dispatch) => {
 	};
 };
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatsList);
+export default connect(mapStateToProps, mapDispatchToProps)(Main);

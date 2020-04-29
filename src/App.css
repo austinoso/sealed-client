@@ -41,7 +41,7 @@
 }
 
 .side-bar {
-	width: 15vw;
+	min-width: 20vw;
 	height: 100vh;
 	padding-left: 20px;
 	padding-right: 20px;
@@ -49,15 +49,17 @@
 	float: left;
 }
 
-.chats {
-	width: 85vw;
-	float: right;
+.chat-section {
+	float: left;
+	width: 80vw;
+	min-height: 100vh;
+	padding-right: 10px;
 }
 
 .message-area {
 	/* position: relative; */
-	max-height: 80vh;
-	min-height: 80vh;
+	max-height: 75vh;
+	min-height: 75vh;
 	overflow: scroll;
 	display: flex;
 	flex-direction: column-reverse;

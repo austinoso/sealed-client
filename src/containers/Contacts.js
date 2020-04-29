@@ -1,21 +1,25 @@
 import React, { useState, useEffect } from 'react';
 import Button from 'react-bootstrap/Button';
-import Container from 'react-bootstrap/Container';
 import { connect } from 'react-redux';
 
 import AddContactForm from '../components/AddContactForm';
+import SentContacts from '../components/Contacts/SentContacts';
+import CurrentContacts from '../components/Contacts/CurrentContacts';
 
+import { setContacts } from '../redux/actions/contacts';
 import { API_ROOT } from '../constants/index';
 
-function Contacts({ username }) {
-	const [contacts, setContacts] = useState([]);
-	const [receivedContacts, setReceivedContacts] = useState([]);
-	const [sentContacts, setSentContacts] = useState([]);
+function Contacts({ setContacts, contacts }) {
+	// const [contacts, setContacts] = useState([]);
+	// const [receivedContacts, setReceivedContacts] = useState([]);
+	// const [sentContacts, setSentContacts] = useState([]);
 
 	const setData = (user) => {
-		setContacts(user.contacts);
-		setReceivedContacts(user.received_requests);
-		setSentContacts(user.pending_requests);
+		setContacts({
+			current: user.contacts,
+			received: user.received_requests,
+			sent: user.pending_requests,
+		});
 	};
 
 	useEffect(() => {
@@ -24,16 +28,28 @@ function Contacts({ username }) {
 			.then((user) => setData(user));
 	}, []);
 
-	const handleClick = (type, item) => {
+	const addContact = (contact) => {
+		setContacts({
+			...contacts,
+			sent: [...contacts.sent, contact],
+		});
+	};
+
+	const handleClick = (type, id) => {
 		switch (type) {
 			case 'del':
-				fetch(`${API_ROOT}/contacts/${item.id}`, {
+				fetch(`${API_ROOT}/contacts/${id}`, {
 					method: 'DELETE',
-				});
+				}).then(
+					setContacts({
+						...contacts,
+						sent: contacts.sent.splice(id, 1),
+					})
+				);
 
 				break;
 			case 'accept':
-				fetch(`${API_ROOT}/contacts/${item.id}`, {
+				fetch(`${API_ROOT}/contacts/${id}`, {
 					method: 'PATCH',
 					headers: {
 						'Content-Type': 'application/json',
@@ -51,7 +67,7 @@ function Contacts({ username }) {
 					body: JSON.stringify({
 						chat: {
 							initiator_id: localStorage.userId,
-							recipient_id: item.id,
+							recipient_id: id,
 						},
 					}),
 				});
@@ -60,7 +76,7 @@ function Contacts({ username }) {
 	};
 
 	const mapContacts = () => {
-		return contacts.map((contact) => (
+		return contacts.current.map((contact) => (
 			<div>
 				<p>
 					<Button
@@ -68,8 +84,8 @@ function Contacts({ username }) {
 							handleClick(
 								'chat',
 								contact.sender.username === localStorage.username
-									? contact.receiver
-									: contact.sender
+									? contact.receiver.id
+									: contact.sender.id
 							)
 						}
 					>
@@ -82,29 +98,13 @@ function Contacts({ username }) {
 		));
 	};
 
-	const mapSentContacts = () => {
-		return sentContacts.map((contact) => (
-			<div>
-				<p>
-					<Button
-						onClick={() => handleClick('del', contact)}
-						variant="outline-danger"
-						size="sm"
-					>
-						{contact.receiver.username} X
-					</Button>
-				</p>
-			</div>
-		));
-	};
-
 	const mapReceivedContacts = () => {
-		return receivedContacts.map((contact) => (
+		return contacts.received.map((contact) => (
 			<div>
 				<p>
 					{contact.sender.username}
 					<Button
-						onClick={() => handleClick('accept', contact)}
+						onClick={() => handleClick('accept', contact.id)}
 						variant="success"
 						size="sm"
 					>
@@ -117,34 +117,38 @@ function Contacts({ username }) {
 
 	return (
 		<div>
-			<h3>Hello! @{username}</h3>
-
+			<h3>Hello! @{localStorage.username}</h3>
+			{console.log(contacts.current)}
 			<h5>Add a Contact</h5>
-			<AddContactForm />
-			{receivedContacts ? (
+			<AddContactForm addContact={addContact} />
+			{contacts.received && contacts.received.length >= 1 ? (
 				<>
 					<h5>Pending Contacts:</h5>
 					<>{mapReceivedContacts()}</>
 				</>
 			) : null}
-
 			<h5>Contacts:</h5>
-			{mapContacts()}
-
-			{sentContacts ? (
-				<>
-					<h5>Sent Contacts:</h5>
-					<>{mapSentContacts()}</>
-				</>
-			) : null}
+			<CurrentContacts />
+			<>
+				<h5>Sent Contacts:</h5>
+				<SentContacts />
+			</>
 		</div>
 	);
 }
 
 function mapStateToProps(state) {
 	return {
-		username: state.username,
+		contacts: state.contacts,
 	};
 }
 
-export default connect(mapStateToProps)(Contacts);
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setContacts: (contacts) => {
+			dispatch(setContacts(contacts));
+		},
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Contacts);

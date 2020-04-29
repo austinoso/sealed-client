@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import actionCable from 'actioncable';
+import { connect } from 'react-redux';
+import Button from 'react-bootstrap/Button';
 
 import MessageArea from './MessageArea';
 import NewMessageForm from '../components/NewMessageForm';
+import { removeChat } from '../redux/actions/chats';
 
 import { API_ROOT, API_WS_ROOT } from '../constants/index';
-import Button from 'react-bootstrap/Button';
 
-export default function Chat({ match }) {
+function Chat({ match, removeChat }) {
 	const [chat, setChat] = useState(null);
 	const [messages, setMessages] = useState([]);
-
-	let channel;
 
 	useEffect(() => {
 		fetch(`${API_ROOT}/chats/${match.params.chatId}`)
@@ -34,7 +34,7 @@ export default function Chat({ match }) {
 	useLayoutEffect(() => {
 		const cable = actionCable.createConsumer(API_WS_ROOT);
 
-		channel = cable.subscriptions.create(
+		cable.subscriptions.create(
 			{ channel: 'ChatsChannel', id: match.params.chatId },
 			{
 				received: function (message) {
@@ -49,6 +49,8 @@ export default function Chat({ match }) {
 
 	function deleteChat() {
 		fetch(`${API_ROOT}/chats/${chat.id}`, { method: 'DELETE' });
+
+		removeChat(chat);
 	}
 
 	function chatUser() {
@@ -66,9 +68,9 @@ export default function Chat({ match }) {
 			{chat ? (
 				<div className="chats">
 					{chat.error ? <Redirect to={{ pathname: '/app' }} /> : null}
-					{chatUser().includes(localStorage.username) ? null : (
+					{/* {chatUser().includes(localStorage.username) ? null : (
 						<Redirect to={{ pathname: '/app' }} />
-					)}
+					)} */}
 					<h1>Chat with: {chatUser()}</h1>
 					<MessageArea messages={messages} />
 					<NewMessageForm chatId={chat.id} />
@@ -80,3 +82,13 @@ export default function Chat({ match }) {
 		</div>
 	);
 }
+
+function mapDispatchToPross(dispatch) {
+	return {
+		removeChat: (chat) => {
+			dispatch(removeChat(chat));
+		},
+	};
+}
+
+export default connect(null, mapDispatchToPross)(Chat);

@@ -1,6 +1,8 @@
 import React, { useState } from 'react';
-import Form from 'react-bootstrap/Form';
+import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
+import Form from 'react-bootstrap/Form';
+
 import { API_ROOT } from '../constants/index';
 
 export default function NewMessageForm({ chatId }) {
@@ -33,15 +35,17 @@ export default function NewMessageForm({ chatId }) {
 
 	return (
 		<Form onSubmit={handleSubmit}>
-			<Form.Group controlId="formNewMessage">
+			<InputGroup controlId="formNewMessage">
 				<Form.Control
 					type="textarea"
 					placeholder="New Message"
 					value={message}
 					onChange={(e) => setMessage(e.target.value)}
 				/>
-			</Form.Group>
-			<Button variant="primary">Submit</Button>
+				<Button type="submit" variant="primary">
+					Submit
+				</Button>
+			</InputGroup>
 		</Form>
 	);
 }
