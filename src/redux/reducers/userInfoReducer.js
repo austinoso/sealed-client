@@ -24,15 +24,22 @@ export default function userInfoReducer(state = initialState, action) {
 		case 'REMOVE_CHAT':
 			return {
 				...state,
-				chats: state.chats.splice(
-					state.chats.findIndex((chat) => chat.id === action.payload.id) - 1,
-					1
-				),
+				chats: state.chats.filter((chat) => chat.id !== action.payload.id),
 			};
 		case 'SET_CONTACTS':
 			return {
 				...state,
 				contacts: action.payload,
+			};
+		case 'CANCEL_CONTACT_REQ':
+			return {
+				...state,
+				contacts: {
+					...state.contacts,
+					sent: state.contacts.sent.filter(
+						(contact) => contact.id !== action.payload
+					),
+				},
 			};
 		default:
 			return state;

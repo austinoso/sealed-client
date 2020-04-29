@@ -3,18 +3,13 @@ import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { API_ROOT } from '../../constants/index';
 
-import { setContacts } from '../../redux/actions/contacts';
+import { cancelContactReq } from '../../redux/actions/contacts';
 
-function SentContacts({ contacts, setContacts }) {
+function SentContacts({ contacts, cancelContactReq }) {
 	const handleClick = (id) => {
 		fetch(`${API_ROOT}/contacts/${id}`, {
 			method: 'DELETE',
-		}).then(
-			setContacts({
-				...contacts,
-				sent: contacts.splice(id, 1),
-			})
-		);
+		}).then(cancelContactReq(id));
 	};
 
 	const mapContacts = () => {
@@ -44,8 +39,8 @@ function mapStateToProps(state) {
 
 const mapDispatchToProps = (dispatch) => {
 	return {
-		setContacts: (contacts) => {
-			dispatch(setContacts(contacts));
+		cancelContactReq: (contact) => {
+			dispatch(cancelContactReq(contact));
 		},
 	};
 };

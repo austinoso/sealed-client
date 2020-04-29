@@ -10,10 +10,6 @@ import { setContacts } from '../redux/actions/contacts';
 import { API_ROOT } from '../constants/index';
 
 function Contacts({ setContacts, contacts }) {
-	// const [contacts, setContacts] = useState([]);
-	// const [receivedContacts, setReceivedContacts] = useState([]);
-	// const [sentContacts, setSentContacts] = useState([]);
-
 	const setData = (user) => {
 		setContacts({
 			current: user.contacts,
@@ -37,17 +33,6 @@ function Contacts({ setContacts, contacts }) {
 
 	const handleClick = (type, id) => {
 		switch (type) {
-			case 'del':
-				fetch(`${API_ROOT}/contacts/${id}`, {
-					method: 'DELETE',
-				}).then(
-					setContacts({
-						...contacts,
-						sent: contacts.sent.splice(id, 1),
-					})
-				);
-
-				break;
 			case 'accept':
 				fetch(`${API_ROOT}/contacts/${id}`, {
 					method: 'PATCH',
@@ -57,45 +42,7 @@ function Contacts({ setContacts, contacts }) {
 					},
 					body: JSON.stringify({ status: true }),
 				});
-			case 'chat':
-				fetch(`${API_ROOT}/chats/`, {
-					method: 'POST',
-					headers: {
-						'Content-Type': 'application/json',
-						Accept: 'application/json',
-					},
-					body: JSON.stringify({
-						chat: {
-							initiator_id: localStorage.userId,
-							recipient_id: id,
-						},
-					}),
-				});
-				break;
 		}
-	};
-
-	const mapContacts = () => {
-		return contacts.current.map((contact) => (
-			<div>
-				<p>
-					<Button
-						onClick={() =>
-							handleClick(
-								'chat',
-								contact.sender.username === localStorage.username
-									? contact.receiver.id
-									: contact.sender.id
-							)
-						}
-					>
-						{contact.sender.username === localStorage.username
-							? contact.receiver.username
-							: contact.sender.username}
-					</Button>
-				</p>
-			</div>
-		));
 	};
 
 	const mapReceivedContacts = () => {
@@ -129,10 +76,12 @@ function Contacts({ setContacts, contacts }) {
 			) : null}
 			<h5>Contacts:</h5>
 			<CurrentContacts />
-			<>
-				<h5>Sent Contacts:</h5>
-				<SentContacts />
-			</>
+			{contacts.sent && contacts.sent.length >= 1 ? (
+				<>
+					<h5>Sent Contacts:</h5>
+					<SentContacts />
+				</>
+			) : null}
 		</div>
 	);
 }

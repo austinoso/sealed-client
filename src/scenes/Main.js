@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { Route } from 'react-router-dom';
+import { Route, Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import { setChatsState } from '../redux/actions/chats';
@@ -20,6 +20,7 @@ function Main({ match, chats, setChats }) {
 
 	return (
 		<div>
+			{localStorage.token ? null : <Redirect to={{ pathname: '/' }} />}
 			<div className="side-bar">
 				<Contacts />
 				{chats ? (
