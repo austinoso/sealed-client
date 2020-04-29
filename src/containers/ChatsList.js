@@ -1,20 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import { Route } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { setChatsState } from '../actions/chats';
 
 import Contacts from './Contacts';
 import Chat from './Chat';
 
 import { API_ROOT } from '../constants/index';
 
-export default function ChatsList({ match }) {
-	const [chats, setChats] = useState([]);
-	const [activeChat, setActiveChat] = useState(null);
-
+function ChatsList({ match, chats, setChats }) {
 	useEffect(() => {
 		fetch(`${API_ROOT}/users/${localStorage.userId}`)
 			.then((r) => r.json())
-			.then((user) => setChats(user.chats));
+			.then((user) => {
+				setChats(user.chats);
+			});
 	}, []);
 
 	return (
@@ -25,7 +26,14 @@ export default function ChatsList({ match }) {
 					<div>
 						<h5>Current Chats</h5>
 						{chats.map((chat) => (
-							<Link to={`/app/${chat.id}`}>Chat: {chat.id} ></Link>
+							<div>
+								<Link to={`/app/${chat.id}`}>
+									{chat.initiator.username === localStorage.username
+										? chat.recipient.username
+										: chat.initiator.username}{' '}
+									>
+								</Link>
+							</div>
 						))}
 					</div>
 				) : null}
@@ -39,3 +47,19 @@ export default function ChatsList({ match }) {
 		</div>
 	);
 }
+
+function mapStateToProps(state) {
+	return {
+		chats: state.chats,
+	};
+}
+
+const mapDispatchToProps = (dispatch) => {
+	return {
+		setChats: (chats) => {
+			dispatch(setChatsState(chats));
+		},
+	};
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(ChatsList);

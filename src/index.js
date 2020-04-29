@@ -1,18 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-// import { createStore } from 'redux';
-// import { Provider } from 'react-redux';
-// import userInfoReducer from './reducers/userInfoReducer';
+import { createStore } from 'redux';
+import { Provider } from 'react-redux';
+import userInfoReducer from './reducers/userInfoReducer';
 import './index.css';
 import App from './App';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 
+let store = createStore(userInfoReducer);
+
 ReactDOM.render(
 	<React.StrictMode>
 		<Router>
-			<App />
+			<Provider store={store}>
+				<App />
+			</Provider>
 		</Router>
 	</React.StrictMode>,
 	document.getElementById('root')

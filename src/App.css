@@ -57,6 +57,7 @@
 .message-area {
 	/* position: relative; */
 	max-height: 80vh;
+	min-height: 80vh;
 	overflow: scroll;
 	display: flex;
 	flex-direction: column-reverse;
