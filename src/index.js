@@ -1,18 +1,18 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
-import { ActionCableProvider } from 'react-actioncable-provider';
+// import { createStore } from 'redux';
+// import { Provider } from 'react-redux';
+// import userInfoReducer from './reducers/userInfoReducer';
 import './index.css';
 import App from './App';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
-import { API_WS_ROOT } from './constants';
 
 ReactDOM.render(
 	<React.StrictMode>
 		<Router>
-			<ActionCableProvider url={API_WS_ROOT}>
-				<App />
-			</ActionCableProvider>
+			<App />
 		</Router>
 	</React.StrictMode>,
 	document.getElementById('root')

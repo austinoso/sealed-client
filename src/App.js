@@ -1,15 +1,36 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
 import './App.css';
-//import Chats from './scenes/Chats';
-import Chat from './components/Chat';
+import React from 'react';
+import { Switch, Route, Link } from 'react-router-dom';
+import ChatsList from './containers/ChatsList';
+import Register from './scenes/Register';
+import Login from './scenes/Login';
 
 function App() {
 	return (
 		<div className="App">
 			<Switch>
 				<Route exact path="/">
-					<Chat id={1} />
+					<h1>Welcome to Sealed</h1>
+					{localStorage.token ? (
+						<p>
+							You're signed in! <Link to="/app">View Chats</Link>
+						</p>
+					) : (
+						<p>
+							<Link to="/login">Login</Link> or{' '}
+							<Link to="/register">Register</Link>
+						</p>
+					)}
+				</Route>
+				<Route
+					path="/app"
+					render={(routerProps) => <ChatsList {...routerProps} />}
+				></Route>
+				<Route exact path="/register">
+					<Register />
+				</Route>
+				<Route exact path="/login">
+					<Login />
 				</Route>
 			</Switch>
 		</div>
