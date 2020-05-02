@@ -16,7 +16,7 @@ export default function MessageArea({ messages }) {
 	};
 
 	return (
-		<div className="message-area">
+		<div className="messages">
 			{viewMessages()}
 			<h3 className="text-muted text-center">
 				This is the start of the Messages

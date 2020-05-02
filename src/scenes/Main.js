@@ -1,67 +1,34 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Route, Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import { setChatsState } from '../redux/actions/chats';
 
-import Contacts from '../containers/Contacts';
 import Chat from '../containers/Chat';
+import Welcome from '../components/Welcome';
+import Contacts from '../containers/Contacts';
 
-import { API_ROOT } from '../constants/index';
+import ChatsList from '../containers/ChatsList';
 
-function Main({ match, chats, setChats }) {
-	useEffect(() => {
-		fetch(`${API_ROOT}/users/${localStorage.userId}`)
-			.then((r) => r.json())
-			.then((user) => {
-				setChats(user.chats);
-			});
-	}, []);
-
+export default function Main({ match }) {
 	return (
-		<div>
-			{localStorage.token ? null : <Redirect to={{ pathname: '/' }} />}
+		<div className="main">
+			{localStorage.token ? null : <Redirect to={{ pathname: '/login' }} />}
 			<div className="side-bar">
+				<Link to={'/app'}>
+					<h3>Hello! @{localStorage.username}</h3>
+				</Link>
+				<ChatsList />
+				<hr></hr>
+				<h5>Start a New Chat</h5>
 				<Contacts />
-				{chats ? (
-					<div>
-						<h5>Current Chats</h5>
-						{chats.map((chat) => (
-							<div>
-								<Link to={`/app/${chat.id}`}>
-									{chat.initiator.username === localStorage.username
-										? chat.recipient.username
-										: chat.initiator.username}{' '}
-									>
-								</Link>
-							</div>
-						))}
-					</div>
-				) : null}
 			</div>
-			<div className="chat-section">
+			<div className="app-section">
 				<Route
 					exact
-					path={`${match.url}/:chatId`}
+					path={`${match.url}/chat/:chatId`}
 					render={(routerProps) => <Chat {...routerProps} />}
 				/>
+				<Route exact path={`${match.url}/`} render={() => <Welcome />} />
 			</div>
 		</div>
 	);
 }
-
-function mapStateToProps(state) {
-	return {
-		chats: state.chats,
-	};
-}
-
-const mapDispatchToProps = (dispatch) => {
-	return {
-		setChats: (chats) => {
-			dispatch(setChatsState(chats));
-		},
-	};
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Main);

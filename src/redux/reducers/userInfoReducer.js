@@ -1,3 +1,5 @@
+import { act } from 'react-dom/test-utils';
+
 const initialState = {
 	username: localStorage.username ? localStorage.username : null,
 	chats: [],
@@ -22,6 +24,7 @@ export default function userInfoReducer(state = initialState, action) {
 				chats: [...state.chats, action.payload],
 			};
 		case 'REMOVE_CHAT':
+			console.log('hit');
 			return {
 				...state,
 				chats: state.chats.filter((chat) => chat.id !== action.payload.id),
@@ -31,14 +34,22 @@ export default function userInfoReducer(state = initialState, action) {
 				...state,
 				contacts: action.payload,
 			};
-		case 'CANCEL_CONTACT_REQ':
+		case 'REMOVE_CONTACT':
 			return {
 				...state,
 				contacts: {
 					...state.contacts,
-					sent: state.contacts.sent.filter(
-						(contact) => contact.id !== action.payload
+					[action.list]: state.contacts[action.list].filter(
+						(contact) => contact.id !== action.contactId
 					),
+				},
+			};
+		case 'ADD_CONTACT':
+			return {
+				...state,
+				contacts: {
+					...state.contacts,
+					[action.list]: [...state.contacts[action.list], action.contact],
 				},
 			};
 		default:

@@ -8,14 +8,16 @@ import MessageArea from './MessageArea';
 import NewMessageForm from '../components/NewMessageForm';
 import { removeChat } from '../redux/actions/chats';
 
-import { API_ROOT, API_WS_ROOT } from '../constants/index';
+import { API_ROOT, API_WS_ROOT, HEADERS } from '../constants/index';
 
 function Chat({ match, removeChat }) {
 	const [chat, setChat] = useState(null);
 	const [messages, setMessages] = useState([]);
 
 	useEffect(() => {
-		fetch(`${API_ROOT}/chats/${match.params.chatId}`)
+		fetch(`${API_ROOT}/chats/${match.params.chatId}`, {
+			headers: HEADERS,
+		})
 			.then((r) => r.json())
 			.then((chat) => {
 				if (!chat.error) {
@@ -48,7 +50,10 @@ function Chat({ match, removeChat }) {
 	});
 
 	function deleteChat() {
-		fetch(`${API_ROOT}/chats/${chat.id}`, { method: 'DELETE' });
+		fetch(`${API_ROOT}/chats/${chat.id}`, {
+			method: 'DELETE',
+			headers: HEADERS,
+		});
 
 		removeChat(chat);
 	}
@@ -64,20 +69,23 @@ function Chat({ match, removeChat }) {
 	}
 
 	return (
-		<div>
+		<div className="chat">
 			{chat ? (
-				<div className="chats">
+				<>
 					{chat.error ? <Redirect to={{ pathname: '/app' }} /> : null}
-					{/* {chatUser().includes(localStorage.username) ? null : (
+					{chatUsers().includes(localStorage.username) ? null : (
 						<Redirect to={{ pathname: '/app' }} />
-					)} */}
+					)}
+
 					<h1>Chat with: {chatUser()}</h1>
-					<MessageArea messages={messages} />
+					<div className="message-section">
+						<MessageArea messages={messages} />
+					</div>
 					<NewMessageForm chatId={chat.id} />
-					<Button onClick={deleteChat} variant="danger" size="sm">
+					<Button href="/app" onClick={deleteChat} variant="danger" size="sm">
 						Delete Chat
 					</Button>
-				</div>
+				</>
 			) : null}
 		</div>
 	);
