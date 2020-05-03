@@ -1,5 +1,3 @@
-import { act } from 'react-dom/test-utils';
-
 const initialState = {
 	username: localStorage.username ? localStorage.username : null,
 	chats: [],

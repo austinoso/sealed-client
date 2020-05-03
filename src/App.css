@@ -22,13 +22,20 @@
 	min-width: 200px;
 	padding: 15px;
 	background-color: #f8f8f8;
+	display: flex;
+	flex-direction: column;
+}
+
+.scroll {
+	max-height: 90vh;
+	overflow-y: scroll;
 }
 
 .app-section {
 	width: 85vw;
 	/* min-width: 450px; */
 	padding: 15px;
-	height: 100%;
+	height: 100vh;
 }
 
 .welcome {
@@ -36,8 +43,12 @@
 	width: 50%;
 }
 
+.chat-info {
+	/* Info */
+}
+
 .message-section {
-	height: 80vh;
+	height: 75vh;
 }
 
 .message-form {

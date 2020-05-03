@@ -1,19 +1,34 @@
-import React, { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect, useLayoutEffect } from 'react';
 
 import { connect } from 'react-redux';
-import { setChats } from '../redux/actions/chats';
+import { setChats, addChat } from '../redux/actions/chats';
 
-import { API_ROOT, HEADERS } from '../constants/index';
+import { API_ROOT, HEADERS, cable } from '../constants/index';
+import { ChatCard } from '../components/ChatCard';
 
 export const ChatsList = ({ chats, setChats }) => {
 	useEffect(() => {
 		fetch(`${API_ROOT}/users/${localStorage.userId}`, { headers: HEADERS })
 			.then((r) => r.json())
 			.then((user) => {
+				console.log(user.chats);
 				setChats(user.chats);
 			});
 	}, []);
+
+	// useLayoutEffect(() => {
+	// 	const chatsCable = cable.subscriptions.create(
+	// 		{ channel: 'ChatsChannel' },
+	// 		{
+	// 			received: function (chat) {
+	// 				addChat(chat);
+	// 			},
+	// 		}
+	// 	);
+	// 	return () => {
+	// 		cable.subscriptions.remove(chatsCable);
+	// 	};
+	// });
 
 	return (
 		<div>
@@ -21,15 +36,18 @@ export const ChatsList = ({ chats, setChats }) => {
 			{chats && chats.length ? (
 				<div>
 					{chats.map((chat) => (
-						<div>
-							<Link to={`/app/chat/${chat.id}`}>
-								{chat.initiator.username === localStorage.username
-									? chat.recipient.username
-									: chat.initiator.username}
-								>
-							</Link>
-						</div>
+						<ChatCard chat={chat} />
+
+						// <div>
+						// 	<Link to={`/app/chat/${chat.id}`}>
+						// 		{chat.initiator.username === localStorage.username
+						// 			? chat.recipient.username
+						// 			: chat.initiator.username}
+						// 		>
+						// 	</Link>
+						// </div>
 					))}
+					{console.log(cable.subscriptions)}
 				</div>
 			) : (
 				<>
@@ -46,6 +64,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	setChats: (chats) => dispatch(setChats(chats)),
+	addChat: (chat) => dispatch(addChat(chat)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatsList);

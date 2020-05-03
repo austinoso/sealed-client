@@ -9,7 +9,7 @@ import { removeContact } from '../../redux/actions/contacts';
 
 function SentContacts({ contacts, addChat, removeContact }) {
 	const startChat = (id) => {
-		fetch(`${API_ROOT}/chats/`, {
+		fetch(`${API_ROOT}/chats`, {
 			method: 'POST',
 			headers: HEADERS,
 			body: JSON.stringify({
@@ -18,9 +18,9 @@ function SentContacts({ contacts, addChat, removeContact }) {
 					recipient_id: id,
 				},
 			}),
-		})
-			.then((r) => r.json())
-			.then((chat) => addChat(chat));
+		});
+		// .then((r) => r.json())
+		// .then((chat) => addChat(chat));
 	};
 
 	const removeFromContacts = (id) => {

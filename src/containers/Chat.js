@@ -8,7 +8,7 @@ import MessageArea from './MessageArea';
 import NewMessageForm from '../components/NewMessageForm';
 import { removeChat } from '../redux/actions/chats';
 
-import { API_ROOT, API_WS_ROOT, HEADERS } from '../constants/index';
+import { API_ROOT, HEADERS, cable } from '../constants/index';
 
 function Chat({ match, removeChat }) {
 	const [chat, setChat] = useState(null);
@@ -31,13 +31,11 @@ function Chat({ match, removeChat }) {
 					setChat(chat);
 				}
 			});
-	}, [match.params.chatId]);
 
-	useLayoutEffect(() => {
-		const cable = actionCable.createConsumer(API_WS_ROOT);
+		console.log(cable.subscriptions);
 
-		cable.subscriptions.create(
-			{ channel: 'ChatsChannel', id: match.params.chatId },
+		const messagesCable = cable.subscriptions.create(
+			{ channel: 'MessagesChannel', id: match.params.chatId },
 			{
 				received: function (message) {
 					setMessages([...messages, message]);
@@ -45,9 +43,23 @@ function Chat({ match, removeChat }) {
 			}
 		);
 		return () => {
-			cable.disconnect();
+			cable.subscriptions.remove(messagesCable);
 		};
-	});
+	}, [match.params.chatId]);
+
+	// useLayoutEffect(() => {
+	// 	const messagesCable = cable.subscriptions.create(
+	// 		{ channel: 'MessagesChannel', id: match.params.chatId },
+	// 		{
+	// 			received: function (message) {
+	// 				setMessages([...messages, message]);
+	// 			},
+	// 		}
+	// 	);
+	// 	return () => {
+	// 		cable.subscriptions.remove(messagesCable);
+	// 	};
+	// });
 
 	function deleteChat() {
 		fetch(`${API_ROOT}/chats/${chat.id}`, {
@@ -64,27 +76,21 @@ function Chat({ match, removeChat }) {
 			: chat.initiator;
 	}
 
-	function chatUsers() {
-		return [chat.initiator, chat.recipient];
-	}
-
 	return (
 		<div className="chat">
 			{chat ? (
 				<>
 					{chat.error ? <Redirect to={{ pathname: '/app' }} /> : null}
-					{chatUsers().includes(localStorage.username) ? null : (
-						<Redirect to={{ pathname: '/app' }} />
-					)}
-
-					<h1>Chat with: {chatUser()}</h1>
+					<div className="chat-info">
+						<h1>Chat with: {chatUser()}</h1>
+						<Button href="/app" onClick={deleteChat} variant="danger" size="sm">
+							Delete Chat
+						</Button>
+					</div>
 					<div className="message-section">
 						<MessageArea messages={messages} />
 					</div>
 					<NewMessageForm chatId={chat.id} />
-					<Button href="/app" onClick={deleteChat} variant="danger" size="sm">
-						Delete Chat
-					</Button>
 				</>
 			) : null}
 		</div>
