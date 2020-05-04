@@ -10,42 +10,52 @@ import { removeChat } from '../redux/actions/chats';
 
 import { API_ROOT, HEADERS, cable } from '../constants/index';
 
-function Chat({ match, removeChat }) {
-	const [chat, setChat] = useState(null);
+function Chat({ match, removeChat, chats }) {
+	const [chat, setChat] = useState(match.params.chatId);
 	const [messages, setMessages] = useState([]);
 
-	useEffect(() => {
-		fetch(`${API_ROOT}/chats/${match.params.chatId}`, {
-			headers: HEADERS,
-		})
-			.then((r) => r.json())
-			.then((chat) => {
-				if (!chat.error) {
-					setChat({
-						id: chat.id,
-						initiator: chat.initiator.username,
-						recipient: chat.recipient.username,
-					});
-					setMessages(chat.messages);
-				} else {
-					setChat(chat);
-				}
-			});
+	// const chat = ;s
+	// console.log
+	// function findChat() {
+	// 	setChat(chats.find((chat) => chat.id == match.params.chatId));
+	// }
 
-		console.log(cable.subscriptions);
+	// useEffect(() => {
+	// 	findChat();
+	// }, []);
 
-		const messagesCable = cable.subscriptions.create(
-			{ channel: 'MessagesChannel', id: match.params.chatId },
-			{
-				received: function (message) {
-					setMessages([...messages, message]);
-				},
-			}
-		);
-		return () => {
-			cable.subscriptions.remove(messagesCable);
-		};
-	}, [match.params.chatId]);
+	// useLayoutEffect(() => {
+	// fetch(`${API_ROOT}/chats/${match.params.chatId}`, {
+	// 	headers: HEADERS,
+	// })
+	// 	.then((r) => r.json())
+	// 	.then((chat) => {
+	// 		if (!chat.error) {
+	// 			setChat({
+	// 				id: chat.id,
+	// 				initiator: chat.initiator.username,
+	// 				recipient: chat.recipient.username,
+	// 			});
+	// 			setMessages(chat.messages);
+	// 		} else {
+	// 			setChat(chat);
+	// 		}
+	// 	});
+
+	// console.log(cable.subscriptions);
+
+	// const messagesCable = cable.subscriptions.create(
+	// 	{ channel: 'MessagesChannel', id: match.params.chatId },
+	// 	{
+	// 		received: function (message) {
+	// 			setMessages([...messages, message]);
+	// 		},
+	// 	}
+	// );
+	// return () => {
+	// 	cable.subscriptions.remove(messagesCable);
+	// };
+	// }, [match.params.chatId]);
 
 	// useLayoutEffect(() => {
 	// 	const messagesCable = cable.subscriptions.create(
@@ -76,9 +86,15 @@ function Chat({ match, removeChat }) {
 			: chat.initiator;
 	}
 
+	function currentChat() {
+		return chats.find((chat) => chat.id == chat);
+	}
+
 	return (
 		<div className="chat">
-			{chat ? (
+			<h1>CHAT</h1>
+			{currentChat() ? console.log(currentChat()) : console.log(currentChat())}
+			{/* {chat ? (
 				<>
 					{chat.error ? <Redirect to={{ pathname: '/app' }} /> : null}
 					<div className="chat-info">
@@ -92,10 +108,14 @@ function Chat({ match, removeChat }) {
 					</div>
 					<NewMessageForm chatId={chat.id} />
 				</>
-			) : null}
+			) : null} */}
 		</div>
 	);
 }
+
+const mapStateToProps = (state) => ({
+	chats: state.chats,
+});
 
 function mapDispatchToPross(dispatch) {
 	return {
@@ -105,4 +125,4 @@ function mapDispatchToPross(dispatch) {
 	};
 }
 
-export default connect(null, mapDispatchToPross)(Chat);
+export default connect(mapStateToProps, mapDispatchToPross)(Chat);

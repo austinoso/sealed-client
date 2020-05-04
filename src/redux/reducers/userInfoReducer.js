@@ -50,6 +50,18 @@ export default function userInfoReducer(state = initialState, action) {
 					[action.list]: [...state.contacts[action.list], action.contact],
 				},
 			};
+		case 'UPDATE_CHAT':
+			const chatsList = state.chats;
+			const chatIndex = chatsList.findIndex(
+				(chat) => chat.id === action.chat.id
+			);
+			chatsList.splice(chatIndex, 1, action.newChat);
+			console.log(chatsList);
+
+			return {
+				...state,
+				chats: chatsList,
+			};
 		default:
 			return state;
 	}

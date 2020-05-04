@@ -4,27 +4,27 @@ import { cable } from '../constants/index';
 import { Link } from 'react-router-dom';
 
 export const ChatCard = ({ chat }) => {
-	const [messages, setMessages] = useState(chat.messages);
+	// const [messages, setMessages] = useState(chat.messages);
 
-	useEffect(() => {
-		cable.subscriptions.create(
-			{ channel: 'MessagesChannel', id: chat.id },
-			{
-				received: function (message) {
-					setMessages([...messages, message]);
-				},
-			}
-		);
-		return () => {
-			// cleanup
-		};
-	}, []);
+	// useEffect(() => {
+	// 	cable.subscriptions.create(
+	// 		{ channel: 'MessagesChannel', id: chat.id },
+	// 		{
+	// 			received: function (message) {
+	// 				setMessages([...messages, message]);
+	// 			},
+	// 		}
+	// 	);
+	// 	return () => {
+	// 		// cleanup
+	// 	};
+	// }, []);
 
 	return (
 		<div>
-			<Link to={`app/chat/${chat.id}`}>chat {chat.id}</Link>
-			{messages && messages.length ? (
-				<p>{messages[messages.length - 1].content}</p>
+			<Link to={`/app/chat/${chat.id}`}>chat {chat.id}</Link>
+			{chat.messages && chat.messages.length ? (
+				<p>{chat.messages[chat.messages.length - 1].content}</p>
 			) : null}
 		</div>
 	);

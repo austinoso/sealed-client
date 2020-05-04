@@ -9,3 +9,7 @@ export const addChat = (chat) => {
 export const removeChat = (chat) => {
 	return { type: 'REMOVE_CHAT', payload: chat };
 };
+
+export const updateChat = (chat, newChat) => {
+	return { type: 'UPDATE_CHAT', chat, newChat };
+};
