@@ -1,7 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import Card from 'react-bootstrap/Card';
+import { connect } from 'react-redux';
 
-export default function MessageArea({ messages }) {
+import { fetchChatMessages } from '../redux/actions/chats';
+
+export function MessageArea({ messages }) {
 	const viewMessages = () => {
 		return messages
 			.map((message) => (
@@ -17,10 +20,20 @@ export default function MessageArea({ messages }) {
 
 	return (
 		<div className="messages">
-			{viewMessages()}
+			{messages ? viewMessages() : null}
 			<h3 className="text-muted text-center">
 				This is the start of the Messages
 			</h3>
 		</div>
 	);
 }
+
+const mapStateToProps = (state) => ({
+	chats: state.chats,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	fetchMessages: (chat) => dispatch(fetchChatMessages(chat)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(MessageArea);

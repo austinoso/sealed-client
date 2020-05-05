@@ -27,7 +27,7 @@ export default function NewMessageForm({ chatId }) {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		postMessage();
-		setMessage(' ');
+		setMessage('');
 	};
 
 	return (

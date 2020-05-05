@@ -1,7 +1,5 @@
 const initialState = {
 	username: localStorage.username ? localStorage.username : null,
-	chats: [],
-	contacts: {},
 };
 
 export default function userInfoReducer(state = initialState, action) {
@@ -12,6 +10,7 @@ export default function userInfoReducer(state = initialState, action) {
 				username: action.payload,
 			};
 		case 'SET_CHATS':
+			console.log('hit');
 			return {
 				...state,
 				chats: action.payload,
@@ -19,10 +18,9 @@ export default function userInfoReducer(state = initialState, action) {
 		case 'ADD_CHAT':
 			return {
 				...state,
-				chats: [...state.chats, action.payload],
+				chats: [...state.chats, { ...action.payload }],
 			};
 		case 'REMOVE_CHAT':
-			console.log('hit');
 			return {
 				...state,
 				chats: state.chats.filter((chat) => chat.id !== action.payload.id),
@@ -50,17 +48,29 @@ export default function userInfoReducer(state = initialState, action) {
 					[action.list]: [...state.contacts[action.list], action.contact],
 				},
 			};
-		case 'UPDATE_CHAT':
+
+		case 'ADD_MESSAGES':
+			console.log(action.chat);
 			const chatsList = state.chats;
 			const chatIndex = chatsList.findIndex(
 				(chat) => chat.id === action.chat.id
 			);
-			chatsList.splice(chatIndex, 1, action.newChat);
+			const chat = chatsList.find((chat) => chat.id === action.chat.id);
+			chatsList.splice(chatIndex, 1, {
+				...action.chat,
+				messages: chat.messages.concat(action.messages),
+			});
 			console.log(chatsList);
 
 			return {
 				...state,
-				chats: chatsList,
+				chats: [...chatsList],
+			};
+
+		case 'SET_ACTIVE_CHAT':
+			return {
+				...state,
+				activeChat: action.chat,
 			};
 		default:
 			return state;

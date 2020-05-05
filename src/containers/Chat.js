@@ -1,114 +1,51 @@
 import React, { useState, useEffect, useLayoutEffect } from 'react';
-import { Redirect } from 'react-router-dom';
-import actionCable from 'actioncable';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 
 import MessageArea from './MessageArea';
 import NewMessageForm from '../components/NewMessageForm';
-import { removeChat } from '../redux/actions/chats';
+import {
+	removeChat,
+	fetchChatMessages,
+	setActiveChat,
+} from '../redux/actions/chats';
+import { API_ROOT } from '../constants/index';
 
-import { API_ROOT, HEADERS, cable } from '../constants/index';
+function Chat({ match, chats, fetchMessages, setActiveChat }) {
+	const activeChat = chats.find(
+		(chat) => chat.id === parseInt(match.params.chatId)
+	);
 
-function Chat({ match, removeChat, chats }) {
-	const [chat, setChat] = useState(match.params.chatId);
-	const [messages, setMessages] = useState([]);
+	useEffect(() => {
+		fetchMessages(activeChat);
+		setActiveChat(activeChat.id);
+	}, [match.params.chatId]);
 
-	// const chat = ;s
-	// console.log
-	// function findChat() {
-	// 	setChat(chats.find((chat) => chat.id == match.params.chatId));
-	// }
+	const deleteChat = () => {
+		fetch(`${API_ROOT}/chats/${activeChat.id}`, { method: 'DELETE' });
+		removeChat(activeChat);
+	};
 
-	// useEffect(() => {
-	// 	findChat();
-	// }, []);
-
-	// useLayoutEffect(() => {
-	// fetch(`${API_ROOT}/chats/${match.params.chatId}`, {
-	// 	headers: HEADERS,
-	// })
-	// 	.then((r) => r.json())
-	// 	.then((chat) => {
-	// 		if (!chat.error) {
-	// 			setChat({
-	// 				id: chat.id,
-	// 				initiator: chat.initiator.username,
-	// 				recipient: chat.recipient.username,
-	// 			});
-	// 			setMessages(chat.messages);
-	// 		} else {
-	// 			setChat(chat);
-	// 		}
-	// 	});
-
-	// console.log(cable.subscriptions);
-
-	// const messagesCable = cable.subscriptions.create(
-	// 	{ channel: 'MessagesChannel', id: match.params.chatId },
-	// 	{
-	// 		received: function (message) {
-	// 			setMessages([...messages, message]);
-	// 		},
-	// 	}
-	// );
-	// return () => {
-	// 	cable.subscriptions.remove(messagesCable);
-	// };
-	// }, [match.params.chatId]);
-
-	// useLayoutEffect(() => {
-	// 	const messagesCable = cable.subscriptions.create(
-	// 		{ channel: 'MessagesChannel', id: match.params.chatId },
-	// 		{
-	// 			received: function (message) {
-	// 				setMessages([...messages, message]);
-	// 			},
-	// 		}
-	// 	);
-	// 	return () => {
-	// 		cable.subscriptions.remove(messagesCable);
-	// 	};
-	// });
-
-	function deleteChat() {
-		fetch(`${API_ROOT}/chats/${chat.id}`, {
-			method: 'DELETE',
-			headers: HEADERS,
-		});
-
-		removeChat(chat);
-	}
-
-	function chatUser() {
-		return chat.initiator === localStorage.username
-			? chat.recipient
-			: chat.initiator;
-	}
-
-	function currentChat() {
-		return chats.find((chat) => chat.id == chat);
-	}
+	const chatUser = () => {
+		return activeChat.initiator.username === localStorage.username
+			? activeChat.recipient.username
+			: activeChat.initiator.username;
+	};
 
 	return (
 		<div className="chat">
-			<h1>CHAT</h1>
-			{currentChat() ? console.log(currentChat()) : console.log(currentChat())}
-			{/* {chat ? (
-				<>
-					{chat.error ? <Redirect to={{ pathname: '/app' }} /> : null}
-					<div className="chat-info">
-						<h1>Chat with: {chatUser()}</h1>
-						<Button href="/app" onClick={deleteChat} variant="danger" size="sm">
-							Delete Chat
-						</Button>
-					</div>
-					<div className="message-section">
-						<MessageArea messages={messages} />
-					</div>
-					<NewMessageForm chatId={chat.id} />
-				</>
-			) : null} */}
+			<>
+				<div className="chat-info">
+					<h1>Chat with: {chatUser()}</h1>
+					<Button onClick={deleteChat} variant="danger" size="sm">
+						Delete Chat
+					</Button>
+				</div>
+				<div className="message-section">
+					<MessageArea messages={activeChat.messages} />
+				</div>
+				<NewMessageForm chatId={activeChat.id} />
+			</>
 		</div>
 	);
 }
@@ -117,12 +54,10 @@ const mapStateToProps = (state) => ({
 	chats: state.chats,
 });
 
-function mapDispatchToPross(dispatch) {
-	return {
-		removeChat: (chat) => {
-			dispatch(removeChat(chat));
-		},
-	};
-}
+const mapDispatchToProps = (dispatch) => ({
+	removeChat: (chat) => dispatch(removeChat(chat)),
+	fetchMessages: (chat) => dispatch(fetchChatMessages(chat)),
+	setActiveChat: (chat) => dispatch(setActiveChat(chat)),
+});
 
-export default connect(mapStateToProps, mapDispatchToPross)(Chat);
+export default connect(mapStateToProps, mapDispatchToProps)(Chat);

@@ -1,37 +1,28 @@
 import React, { useEffect, useState } from 'react';
 import { connect } from 'react-redux';
-import { cable } from '../constants/index';
 import { Link } from 'react-router-dom';
+import { updateChat } from '../redux/actions/chats';
 
-export const ChatCard = ({ chat }) => {
+export const ChatCard = ({ chat, activeChat }) => {
 	// const [messages, setMessages] = useState(chat.messages);
 
-	// useEffect(() => {
-	// 	cable.subscriptions.create(
-	// 		{ channel: 'MessagesChannel', id: chat.id },
-	// 		{
-	// 			received: function (message) {
-	// 				setMessages([...messages, message]);
-	// 			},
-	// 		}
-	// 	);
-	// 	return () => {
-	// 		// cleanup
-	// 	};
-	// }, []);
 
 	return (
 		<div>
 			<Link to={`/app/chat/${chat.id}`}>chat {chat.id}</Link>
 			{chat.messages && chat.messages.length ? (
-				<p>{chat.messages[chat.messages.length - 1].content}</p>
+				<p>{chat.messages.length}</p>
 			) : null}
 		</div>
 	);
 };
 
-const mapStateToProps = (state) => ({});
+const mapStateToProps = (state) => ({
+	activeChat: state.activeChat,
+});
 
-const mapDispatchToProps = {};
+const mapDispatchToProps = (dispatch) => ({
+	updateChat: (chat, newChat) => dispatch(updateChat(chat, newChat)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(ChatCard);

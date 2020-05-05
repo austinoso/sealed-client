@@ -4,10 +4,9 @@ import Button from 'react-bootstrap/Button';
 import { API_ROOT, HEADERS } from '../../constants/index';
 
 import { setContacts } from '../../redux/actions/contacts';
-import { addChat } from '../../redux/actions/chats';
 import { removeContact } from '../../redux/actions/contacts';
 
-function SentContacts({ contacts, addChat, removeContact }) {
+function SentContacts({ contacts, removeContact }) {
 	const startChat = (id) => {
 		fetch(`${API_ROOT}/chats`, {
 			method: 'POST',
@@ -19,8 +18,6 @@ function SentContacts({ contacts, addChat, removeContact }) {
 				},
 			}),
 		});
-		// .then((r) => r.json())
-		// .then((chat) => addChat(chat));
 	};
 
 	const removeFromContacts = (id) => {
@@ -80,9 +77,6 @@ const mapDispatchToProps = (dispatch) => {
 	return {
 		setContacts: (contacts) => {
 			dispatch(setContacts(contacts));
-		},
-		addChat: (chat) => {
-			dispatch(addChat(chat));
 		},
 		removeContact: (list, chatId) => {
 			dispatch(removeContact(list, chatId));
