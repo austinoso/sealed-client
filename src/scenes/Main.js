@@ -1,20 +1,20 @@
 import React, { useEffect } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+
 import { connect } from 'react-redux';
 import {
 	setChats,
 	addChat,
-	updateChat,
+	acceptChat,
 	addMessages,
 	removeChat,
 } from '../redux/actions/chats';
-import { API_ROOT, HEADERS, cable } from '../constants/index';
-
-import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
 
 import MainView from '../containers/MainView';
 import ChatsList from '../containers/ChatsList';
+import { API_ROOT, HEADERS, cable } from '../constants/index';
 
 export function Main({
 	match,
@@ -23,6 +23,7 @@ export function Main({
 	chats,
 	addMessages,
 	removeChat,
+	acceptChat,
 }) {
 	const fetchUser = () => {
 		return fetch(`${API_ROOT}/users/${localStorage.userId}`, {
@@ -51,8 +52,11 @@ export function Main({
 			return {
 				...chat,
 				cable: createChatCable(chat),
-				notications: 0,
 				messages: [],
+				user:
+					chat.initiator.username === localStorage.username
+						? chat.recipient.username
+						: chat.initiator.username,
 			};
 		});
 		setChats(await chats);
@@ -66,8 +70,18 @@ export function Main({
 					console.log(data);
 					if (data.action === 'DEL') {
 						removeChat(data.chat);
+					} else if (data.action === 'UPDATE') {
+						console.log(data);
+						acceptChat(data.chat);
 					} else {
-						addChat({ ...data.chat, cable: createChatCable(data.chat) });
+						addChat({
+							...data.chat,
+							cable: createChatCable(data.chat),
+							user:
+								data.chat.initiator.username === localStorage.username
+									? data.chat.recipient.username
+									: data.chat.initiator.username,
+						});
 					}
 				},
 			}
@@ -92,9 +106,9 @@ export function Main({
 					</div>
 					<hr></hr>
 					<div id="menu">
-						<Button href="/app" size="sm">
+						<Link to={'/app'} className="btn btn-primary">
 							Start a New Chat
-						</Button>
+						</Link>
 						<div className="scroll">
 							<ChatsList />
 						</div>
@@ -127,7 +141,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	setChats: (chats) => dispatch(setChats(chats)),
 	addChat: (chat) => dispatch(addChat(chat)),
-	updateChat: (chat, newChat) => dispatch(updateChat(chat, newChat)),
+	acceptChat: (chat) => dispatch(acceptChat(chat)),
 	addMessages: (chat, messages) => dispatch(addMessages(chat, messages)),
 	removeChat: (chat) => dispatch(removeChat(chat)),
 });

@@ -1,9 +1,12 @@
 const initialState = {
 	user: localStorage.username ? localStorage.username : null,
-	newChats: [],
 };
 
 export default function userInfoReducer(state = initialState, action) {
+	const getChatIndex = (chat) => {
+		return state.chats.findIndex((c) => c.id === chat.id);
+	};
+
 	switch (action.type) {
 		case 'SET_USERNAME':
 			return {
@@ -66,23 +69,17 @@ export default function userInfoReducer(state = initialState, action) {
 				chats: [...chatsList],
 			};
 
-		case 'SET_ACTIVE_CHAT':
-			return {
-				...state,
-				activeChat: action.chat,
-			};
-		case 'ADD_NEW_CHAT':
-			return {
-				...state,
-				newChats: [...state.newChats, action.chat],
-			};
-		case 'REMOVE_NEW_CHAT':
-			return {
-				...state,
-				newChats: [
-					...state.newChats.filter((chat) => chat.id !== action.chat.id),
-				],
-			};
+		case 'ACCEPT_CHAT':
+			console.log('hit');
+			const cList = state.chats;
+			const cIndex = cList.findIndex((chat) => chat.id === action.chat.id);
+			const c = cList.find((chat) => chat.id === action.chat.id);
+			cList.splice(cIndex, 1, {
+				...c,
+				accepted: true,
+			});
+
+			return { ...state, chats: [...cList] };
 		default:
 			return state;
 	}

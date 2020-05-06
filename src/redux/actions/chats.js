@@ -16,8 +16,8 @@ export const updateChat = (chat, newChat) => {
 	return { type: 'UPDATE_CHAT', chat, newChat };
 };
 
-export const setActiveChat = (chat) => {
-	return { type: 'SET_ACTIVE_CHAT', chat };
+export const acceptChat = (chat) => {
+	return { type: 'ACCEPT_CHAT', chat };
 };
 
 export function fetchChatMessages(chat) {
