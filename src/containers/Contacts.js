@@ -3,12 +3,12 @@ import SentContacts from '../components/Contacts/SentContacts';
 import CurrentContacts from '../components/Contacts/CurrentContacts';
 
 import { connect } from 'react-redux';
-import { setContacts } from '../redux/actions/contacts';
+import { setContacts, addContact } from '../redux/actions/contacts';
 
-import { API_ROOT, HEADERS } from '../constants/index';
+import { API_ROOT, HEADERS, cable } from '../constants/index';
 import PendingContacts from '../components/Contacts/PendingContacts';
 
-function Contacts({ setContacts, contacts }) {
+function Contacts({ setContacts, contacts, addContact }) {
 	const setData = (user) => {
 		setContacts({
 			current: user.contacts,
@@ -23,6 +23,20 @@ function Contacts({ setContacts, contacts }) {
 		})
 			.then((r) => r.json())
 			.then((user) => setData(user));
+
+		cable.subscriptions.create(
+			{ channel: 'ContactsChannel' },
+			{
+				received: function (data) {
+					console.log(data);
+					if (!data.contact.status) {
+						addContact('received', data.contact);
+					} else if (data.contact.status) {
+						addContact('current', data.contact);
+					}
+				},
+			}
+		);
 	}, []);
 
 	return (
@@ -47,6 +61,7 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({
 	setContacts: (contacts) => dispatch(setContacts(contacts)),
+	addContact: (list, contact) => dispatch(addContact(list, contact)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contacts);

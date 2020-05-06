@@ -30,6 +30,7 @@ function SentContacts({ contacts, addContact, removeContact }) {
 		return contacts.map((contact) => (
 			<div>
 				<h6>Pending Requests:</h6>
+				{console.log(contact)}
 				<p>
 					{contact.sender.username}
 					<Button

@@ -3,6 +3,8 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import { updateChat } from '../redux/actions/chats';
 
+import Card from 'react-bootstrap/Card';
+
 export const ChatCard = ({ chat, activeChat }) => {
 	const chatUser = () => {
 		return chat.initiator.username === localStorage.username
@@ -10,13 +12,21 @@ export const ChatCard = ({ chat, activeChat }) => {
 			: chat.initiator;
 	};
 
+	const lastMessage = () => {
+		if (chat.messages && chat.messages.length) {
+			return chat.messages[chat.messages.length - 1].content;
+		} else if (chat.last_message) {
+			return chat.last_message.content;
+		}
+	};
+
 	return (
-		<div>
-			<Link to={`/app/chat/${chat.id}`}>{chatUser().username}</Link>
-			{chat.messages && chat.messages.length ? (
-				<p>{chat.messages.length}</p>
-			) : null}
-		</div>
+		<Card>
+			<Card.Body>
+				<Link to={`/app/chat/${chat.id}`}>{chatUser().username}</Link>
+				<p>{lastMessage()}</p>
+			</Card.Body>
+		</Card>
 	);
 };
 
