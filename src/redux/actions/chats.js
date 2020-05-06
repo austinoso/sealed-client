@@ -38,3 +38,7 @@ export function fetchChatMessages(chat) {
 export const addMessages = (chat, messages) => {
 	return { type: 'ADD_MESSAGES', chat, messages };
 };
+
+export const addNewChat = (chat) => {
+	return { type: 'ADD_NEW_CHAT', chat };
+};

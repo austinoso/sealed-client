@@ -6,6 +6,7 @@ import {
 	addChat,
 	updateChat,
 	addMessages,
+	removeChat,
 } from '../redux/actions/chats';
 import { API_ROOT, HEADERS, cable } from '../constants/index';
 
@@ -19,9 +20,9 @@ export function Main({
 	match,
 	setChats,
 	addChat,
-	updateChat,
 	chats,
 	addMessages,
+	removeChat,
 }) {
 	const fetchUser = () => {
 		return fetch(`${API_ROOT}/users/${localStorage.userId}`, {
@@ -61,16 +62,23 @@ export function Main({
 		cable.subscriptions.create(
 			{ channel: 'ChatsChannel' },
 			{
-				received: function (chat) {
-					addChat({ ...chat, cable: createChatCable(chat) });
+				received: function (data) {
+					console.log(data);
+					if (data.action === 'DEL') {
+						removeChat(data.chat);
+					} else {
+						addChat({ ...data.chat, cable: createChatCable(data.chat) });
+					}
 				},
 			}
 		);
 	};
 
 	useEffect(() => {
-		createChatsCable();
-		fetchChats();
+		if (localStorage.token) {
+			createChatsCable();
+			fetchChats();
+		}
 	}, []);
 
 	const render = () => {
@@ -97,12 +105,19 @@ export function Main({
 		);
 	};
 
-	return (
-		<div className="main">
-			{localStorage.token ? null : <Redirect to={{ pathname: '/login' }} />}
-			{chats ? render() : null}
-		</div>
-	);
+	if (localStorage.token) {
+		return (
+			<>
+				<div className="main">{chats ? render() : null}</div>
+			</>
+		);
+	} else {
+		return (
+			<>
+				<Redirect to={'/login'} />
+			</>
+		);
+	}
 }
 
 const mapStateToProps = (state) => ({
@@ -114,6 +129,7 @@ const mapDispatchToProps = (dispatch) => ({
 	addChat: (chat) => dispatch(addChat(chat)),
 	updateChat: (chat, newChat) => dispatch(updateChat(chat, newChat)),
 	addMessages: (chat, messages) => dispatch(addMessages(chat, messages)),
+	removeChat: (chat) => dispatch(removeChat(chat)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

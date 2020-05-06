@@ -6,6 +6,8 @@ import { addChat } from '../redux/actions/chats';
 import { ChatCard } from '../components/ChatCard';
 
 export const ChatsList = ({ chats }) => {
+	// const orderedChats = chats.sort(chat => chat.)
+
 	return (
 		<div>
 			<h4>Current Chats</h4>

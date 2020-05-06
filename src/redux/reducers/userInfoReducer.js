@@ -1,5 +1,6 @@
 const initialState = {
-	username: localStorage.username ? localStorage.username : null,
+	user: localStorage.username ? localStorage.username : null,
+	newChats: [],
 };
 
 export default function userInfoReducer(state = initialState, action) {
@@ -50,7 +51,6 @@ export default function userInfoReducer(state = initialState, action) {
 			};
 
 		case 'ADD_MESSAGES':
-			console.log(action.chat);
 			const chatsList = state.chats;
 			const chatIndex = chatsList.findIndex(
 				(chat) => chat.id === action.chat.id
@@ -60,7 +60,6 @@ export default function userInfoReducer(state = initialState, action) {
 				...action.chat,
 				messages: chat.messages.concat(action.messages),
 			});
-			console.log(chatsList);
 
 			return {
 				...state,
@@ -71,6 +70,18 @@ export default function userInfoReducer(state = initialState, action) {
 			return {
 				...state,
 				activeChat: action.chat,
+			};
+		case 'ADD_NEW_CHAT':
+			return {
+				...state,
+				newChats: [...state.newChats, action.chat],
+			};
+		case 'REMOVE_NEW_CHAT':
+			return {
+				...state,
+				newChats: [
+					...state.newChats.filter((chat) => chat.id !== action.chat.id),
+				],
 			};
 		default:
 			return state;

@@ -4,12 +4,15 @@ import { Link } from 'react-router-dom';
 import { updateChat } from '../redux/actions/chats';
 
 export const ChatCard = ({ chat, activeChat }) => {
-	// const [messages, setMessages] = useState(chat.messages);
-
+	const chatUser = () => {
+		return chat.initiator.username === localStorage.username
+			? chat.recipient
+			: chat.initiator;
+	};
 
 	return (
 		<div>
-			<Link to={`/app/chat/${chat.id}`}>chat {chat.id}</Link>
+			<Link to={`/app/chat/${chat.id}`}>{chatUser().username}</Link>
 			{chat.messages && chat.messages.length ? (
 				<p>{chat.messages.length}</p>
 			) : null}
