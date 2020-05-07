@@ -60,7 +60,7 @@ export default function userInfoReducer(state = initialState, action) {
 			);
 			const chat = chatsList.find((chat) => chat.id === action.chat.id);
 			chatsList.splice(chatIndex, 1, {
-				...action.chat,
+				...chat,
 				messages: chat.messages.concat(action.messages),
 			});
 

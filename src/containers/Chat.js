@@ -26,32 +26,35 @@ function Chat({ match, chats, fetchMessages }) {
 		removeChat(activeChat);
 	};
 
-	return (
-		<div className="chat">
-			{activeChat ? null : <Redirect to="/app" />}
-			<>
-				<div className="chat-info">
-					<h1>Chat with: {activeChat.user}</h1>
-					<Link to="/app">
-						<Button onClick={deleteChat} variant="danger" size="sm">
-							Delete Chat
-						</Button>
-					</Link>
-				</div>
+	if (activeChat) {
+		return (
+			<div className="chat">
+				<>
+					<div className="chat-info">
+						<h1>Chat with: {activeChat.user}</h1>
+						<Link to="/app">
+							<Button onClick={deleteChat} variant="danger" size="sm">
+								Delete Chat
+							</Button>
+						</Link>
+					</div>
 
-				{activeChat.accepted ? (
-					<>
-						<div className="message-section">
-							<MessageArea messages={activeChat.messages} />
-						</div>
-						<NewMessageForm chatId={activeChat.id} />
-					</>
-				) : (
-					<AcceptChatPrompt chat={activeChat} />
-				)}
-			</>
-		</div>
-	);
+					{activeChat.accepted ? (
+						<>
+							<div className="message-section">
+								<MessageArea messages={activeChat.messages} />
+							</div>
+							<NewMessageForm chatId={activeChat.id} />
+						</>
+					) : (
+						<AcceptChatPrompt chat={activeChat} />
+					)}
+				</>
+			</div>
+		);
+	} else {
+		return <Redirect to="/app" />;
+	}
 }
 
 const mapStateToProps = (state) => ({
