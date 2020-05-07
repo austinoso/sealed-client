@@ -1,67 +1,149 @@
 import React, { useEffect } from 'react';
-import { Route, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
+import Button from 'react-bootstrap/Button';
+
 import { connect } from 'react-redux';
-import { setChatsState } from '../redux/actions/chats';
+import {
+	setChats,
+	addChat,
+	acceptChat,
+	addMessages,
+	removeChat,
+} from '../redux/actions/chats';
 
-import Contacts from '../containers/Contacts';
-import Chat from '../containers/Chat';
+import MainView from '../containers/MainView';
+import ChatsList from '../containers/ChatsList';
+import { API_ROOT, HEADERS, cable } from '../constants/index';
 
-import { API_ROOT } from '../constants/index';
-
-function Main({ match, chats, setChats }) {
-	useEffect(() => {
-		fetch(`${API_ROOT}/users/${localStorage.userId}`)
+export function Main({
+	match,
+	setChats,
+	addChat,
+	chats,
+	addMessages,
+	removeChat,
+	acceptChat,
+}) {
+	const fetchUser = () => {
+		return fetch(`${API_ROOT}/users/${localStorage.userId}`, {
+			headers: HEADERS,
+		})
 			.then((r) => r.json())
-			.then((user) => {
-				setChats(user.chats);
-			});
+			.then((user) => user);
+	};
+
+	const createChatCable = (chat) => {
+		return cable.subscriptions.create(
+			{ channel: 'MessagesChannel', id: chat.id },
+			{
+				received: (message) => {
+					{
+						addMessages(chat, [message]);
+					}
+				},
+			}
+		);
+	};
+
+	const fetchChats = async () => {
+		const user = await fetchUser();
+		const chats = await user.chats.map((chat) => {
+			return {
+				...chat,
+				cable: createChatCable(chat),
+				messages: [],
+				user:
+					chat.initiator.username === localStorage.username
+						? chat.recipient.username
+						: chat.initiator.username,
+			};
+		});
+		setChats(await chats);
+	};
+
+	const createChatsCable = () => {
+		cable.subscriptions.create(
+			{ channel: 'ChatsChannel' },
+			{
+				received: function (data) {
+					console.log(data);
+					if (data.action === 'DEL') {
+						removeChat(data.chat);
+					} else if (data.action === 'UPDATE') {
+						console.log(data);
+						acceptChat(data.chat);
+					} else {
+						addChat({
+							...data.chat,
+							cable: createChatCable(data.chat),
+							user:
+								data.chat.initiator.username === localStorage.username
+									? data.chat.recipient.username
+									: data.chat.initiator.username,
+						});
+					}
+				},
+			}
+		);
+	};
+
+	useEffect(() => {
+		if (localStorage.token) {
+			createChatsCable();
+			fetchChats();
+		}
 	}, []);
 
-	return (
-		<div>
-			{localStorage.token ? null : <Redirect to={{ pathname: '/' }} />}
-			<div className="side-bar">
-				<Contacts />
-				{chats ? (
-					<div>
-						<h5>Current Chats</h5>
-						{chats.map((chat) => (
-							<div>
-								<Link to={`/app/${chat.id}`}>
-									{chat.initiator.username === localStorage.username
-										? chat.recipient.username
-										: chat.initiator.username}{' '}
-									>
-								</Link>
-							</div>
-						))}
+	const render = () => {
+		return (
+			<>
+				<div className="side-bar">
+					<div className="top">
+						<Link to={'/app'}>
+							<h3>Hello! @{localStorage.username}</h3>
+						</Link>
 					</div>
-				) : null}
-			</div>
-			<div className="chat-section">
-				<Route
-					exact
-					path={`${match.url}/:chatId`}
-					render={(routerProps) => <Chat {...routerProps} />}
-				/>
-			</div>
-		</div>
-	);
+					<hr></hr>
+					<div id="menu">
+						<Link to={'/app'} className="btn btn-primary">
+							Start a New Chat
+						</Link>
+						<div className="scroll">
+							<ChatsList />
+						</div>
+					</div>
+				</div>
+				<MainView />
+			</>
+		);
+	};
+
+	if (localStorage.token) {
+		return (
+			<>
+				<div className="main">{chats ? render() : null}</div>
+			</>
+		);
+	} else {
+		return (
+			<>
+				<Redirect to={'/login'} />
+			</>
+		);
+	}
 }
 
-function mapStateToProps(state) {
-	return {
-		chats: state.chats,
-	};
-}
+const mapStateToProps = (state) => ({
+	chats: state.chats,
+});
 
-const mapDispatchToProps = (dispatch) => {
-	return {
-		setChats: (chats) => {
-			dispatch(setChatsState(chats));
-		},
-	};
-};
+const mapDispatchToProps = (dispatch) => ({
+	setChats: (chats) => dispatch(setChats(chats)),
+	addChat: (chat) => dispatch(addChat(chat)),
+	acceptChat: (chat) => dispatch(acceptChat(chat)),
+	addMessages: (chat, messages) => dispatch(addMessages(chat, messages)),
+	removeChat: (chat) => dispatch(removeChat(chat)),
+});
 
 export default connect(mapStateToProps, mapDispatchToProps)(Main);

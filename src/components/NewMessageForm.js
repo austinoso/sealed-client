@@ -3,7 +3,7 @@ import InputGroup from 'react-bootstrap/InputGroup';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 
-import { API_ROOT } from '../constants/index';
+import { API_ROOT, HEADERS } from '../constants/index';
 
 export default function NewMessageForm({ chatId }) {
 	const [message, setMessage] = useState();
@@ -11,10 +11,7 @@ export default function NewMessageForm({ chatId }) {
 	const postMessage = () => {
 		const config = {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/json',
-			},
+			headers: HEADERS,
 			body: JSON.stringify({
 				message: {
 					chat_id: chatId,
@@ -30,22 +27,24 @@ export default function NewMessageForm({ chatId }) {
 	const handleSubmit = (e) => {
 		e.preventDefault();
 		postMessage();
-		setMessage(' ');
+		setMessage('');
 	};
 
 	return (
-		<Form onSubmit={handleSubmit}>
-			<InputGroup controlId="formNewMessage">
-				<Form.Control
-					type="textarea"
-					placeholder="New Message"
-					value={message}
-					onChange={(e) => setMessage(e.target.value)}
-				/>
-				<Button type="submit" variant="primary">
-					Submit
-				</Button>
-			</InputGroup>
-		</Form>
+		<div className="message-form">
+			<Form onSubmit={handleSubmit}>
+				<InputGroup controlId="formNewMessage">
+					<Form.Control
+						type="textarea"
+						placeholder="New Message"
+						value={message}
+						onChange={(e) => setMessage(e.target.value)}
+					/>
+					<Button type="submit" variant="primary">
+						Submit
+					</Button>
+				</InputGroup>
+			</Form>
+		</div>
 	);
 }

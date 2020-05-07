@@ -1,20 +1,20 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { addContact } from '../redux/actions/contacts';
+
 import Form from 'react-bootstrap/Form';
 import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
-import { API_ROOT } from '../constants/index';
+import { API_ROOT, HEADERS } from '../constants/index';
 
-export default function AddContactForm({ addContact }) {
+function AddContactForm({ addContact }) {
 	const [username, setUsername] = useState();
 	const [error, setError] = useState();
 
 	const postRequest = () => {
 		const config = {
 			method: 'POST',
-			headers: {
-				'Content-Type': 'application/json',
-				Accept: 'application/json',
-			},
+			headers: HEADERS,
 			body: JSON.stringify({
 				contact: {
 					receiver_username: username,
@@ -31,7 +31,8 @@ export default function AddContactForm({ addContact }) {
 						"User doesn't exist, Please make sure you're using proper case"
 					);
 				} else {
-					addContact(contact);
+					// console.log(contact);
+					addContact('sent', contact);
 				}
 			});
 	};
@@ -60,3 +61,13 @@ export default function AddContactForm({ addContact }) {
 		</>
 	);
 }
+
+const mapStateToProps = (state) => ({
+	chats: state.chats,
+});
+
+const mapDispatchToProps = (dispatch) => ({
+	addContact: (list, contact) => dispatch(addContact(list, contact)),
+});
+
+export default connect(mapStateToProps, mapDispatchToProps)(AddContactForm);

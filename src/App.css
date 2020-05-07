@@ -1,13 +1,8 @@
 .App {
-	position: absolute;
-	overflow: hidden;
+	/* position: absolute; */
+	overflow-y: hidden;
 	max-height: 100vh;
-	min-width: 100vw;
-}
-
-.App-logo {
-	height: 40vmin;
-	pointer-events: none;
+	/* min-width: 100vw; */
 }
 
 @media (prefers-reduced-motion: no-preference) {
@@ -16,52 +11,54 @@
 	}
 }
 
-.App-header {
-	background-color: #282c34;
-	min-height: 100vh;
-	display: flex;
-	flex-direction: column;
-	align-items: center;
-	justify-content: center;
-	font-size: calc(10px + 2vmin);
-	color: white;
-}
-
-.App-link {
-	color: #61dafb;
-}
-
-@keyframes App-logo-spin {
-	from {
-		transform: rotate(0deg);
-	}
-	to {
-		transform: rotate(360deg);
-	}
+.main {
+	display: grid;
+	grid-template-columns: 1fr 4fr;
+	height: 100vh;
 }
 
 .side-bar {
-	min-width: 20vw;
-	height: 100vh;
-	padding-left: 20px;
-	padding-right: 20px;
+	max-width: 15vw;
+	min-width: 200px;
+	padding: 15px;
 	background-color: #f8f8f8;
-	float: left;
+	display: flex;
+	flex-direction: column;
 }
 
-.chat-section {
-	float: left;
-	width: 80vw;
-	min-height: 100vh;
-	padding-right: 10px;
+.scroll {
+	max-height: 90vh;
+	overflow-y: scroll;
 }
 
-.message-area {
-	/* position: relative; */
-	max-height: 75vh;
-	min-height: 75vh;
+.app-section {
+	width: 85vw;
+	/* min-width: 450px; */
+	padding: 15px;
+	height: 100vh;
+}
+
+.welcome {
+	margin: auto;
+	width: 50%;
+}
+
+.chat-info {
+	/* Info */
+}
+
+.message-section {
+	height: 75vh;
+}
+
+.message-form {
+	margin-top: 10px;
+	margin-bottom: 10px;
+}
+
+.messages {
+	height: 100%;
 	overflow: scroll;
 	display: flex;
 	flex-direction: column-reverse;
-	padding: 10px;
 }
