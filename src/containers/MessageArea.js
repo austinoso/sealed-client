@@ -11,7 +11,12 @@ export function MessageArea({ messages }) {
 				<Card>
 					<Card.Body>
 						<p>{message.content}</p>
-						<footer className="text-muted">{message.user.username}</footer>
+						<footer className="text-muted">
+							<p>
+								{message.user.username} at{' '}
+								{new Date(message.created_at).toUTCString().split(' ')[4]}
+							</p>
+						</footer>
 					</Card.Body>
 				</Card>
 			))

@@ -39,6 +39,7 @@ export function Main({
 			{
 				received: (message) => {
 					{
+						console.log(message);
 						addMessages(chat, [message]);
 					}
 				},
