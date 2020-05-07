@@ -6,6 +6,18 @@ import { addChat } from '../redux/actions/chats';
 import { ChatCard } from '../components/ChatCard';
 
 export const ChatsList = ({ chats }) => {
+	// const orderedChats = () => {
+	// 	return [...chats].sort((a, b) => {
+	// 		if (a.messages.length && b.messages.length) {
+	// 			console.log(a);
+	// 			return (
+	// 				Date.parse(a.messages[0].created_at) -
+	// 				Date.parse(b.messages[0].created_at)
+	// 			);
+	// 		}
+	// 	});
+	// };
+
 	return (
 		<div>
 			<h4>Current Chats</h4>
