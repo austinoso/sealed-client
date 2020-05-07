@@ -1,7 +1,7 @@
 import actionCable from 'actioncable';
 
 export const API_ROOT = 'https://sealed-api.herokuapp.com';
-export const API_WS_ROOT = 'wss://https://sealed-api.herokuapp.com/cable';
+export const API_WS_ROOT = 'wss://sealed-api.herokuapp.com/cable';
 export const HEADERS = {
 	'Content-Type': 'application/json',
 	Accept: 'application/json',
