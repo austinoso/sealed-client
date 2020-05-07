@@ -40,7 +40,6 @@ export function Main({
 				received: (message) => {
 					{
 						addMessages(chat, [message]);
-						
 					}
 				},
 			}
@@ -49,18 +48,22 @@ export function Main({
 
 	const fetchChats = async () => {
 		const user = await fetchUser();
-		const chats = await user.chats.map((chat) => {
-			return {
-				...chat,
-				cable: createChatCable(chat),
-				messages: [],
-				user:
-					chat.initiator.username === localStorage.username
-						? chat.recipient.username
-						: chat.initiator.username,
-			};
-		});
-		setChats(await chats);
+		if (await user.chats) {
+			const chats = await user.chats.map((chat) => {
+				return {
+					...chat,
+					cable: createChatCable(chat),
+					messages: [],
+					user:
+						chat.initiator.username === localStorage.username
+							? chat.recipient.username
+							: chat.initiator.username,
+				};
+			});
+			setChats(await chats);
+		} else {
+			setChats([]);
+		}
 	};
 
 	const createChatsCable = () => {
