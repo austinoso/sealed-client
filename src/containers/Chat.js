@@ -18,7 +18,7 @@ function Chat({ match, chats, fetchMessages }) {
 	);
 
 	useEffect(() => {
-		fetchMessages(activeChat);
+		if (!activeChat.messages.length) fetchMessages(activeChat);
 	}, [match.params.chatId]);
 
 	const deleteChat = () => {

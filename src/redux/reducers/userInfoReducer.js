@@ -70,7 +70,6 @@ export default function userInfoReducer(state = initialState, action) {
 			};
 
 		case 'ACCEPT_CHAT':
-			console.log('hit');
 			const cList = state.chats;
 			const cIndex = cList.findIndex((chat) => chat.id === action.chat.id);
 			const c = cList.find((chat) => chat.id === action.chat.id);
@@ -80,6 +79,7 @@ export default function userInfoReducer(state = initialState, action) {
 			});
 
 			return { ...state, chats: [...cList] };
+
 		default:
 			return state;
 	}

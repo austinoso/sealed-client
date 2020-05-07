@@ -40,6 +40,7 @@ export function Main({
 				received: (message) => {
 					{
 						addMessages(chat, [message]);
+						
 					}
 				},
 			}
