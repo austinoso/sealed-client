@@ -1,4 +1,5 @@
 import React from 'react';
+import 'bootstrap/dist/css/bootstrap.min.css';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router } from 'react-router-dom';
 import { createStore, applyMiddleware } from 'redux';
@@ -7,7 +8,6 @@ import thunk from 'redux-thunk';
 import userInfoReducer from './redux/reducers/userInfoReducer';
 import './index.css';
 import App from './App';
-import 'bootstrap/dist/css/bootstrap.min.css';
 import * as serviceWorker from './serviceWorker';
 
 let store = createStore(userInfoReducer, applyMiddleware(thunk));

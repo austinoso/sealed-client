@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
+import AddContactForm from '../AddContactForm';
 import { API_ROOT, HEADERS } from '../../constants/index';
 
 import { removeContact } from '../../redux/actions/contacts';
@@ -15,23 +16,34 @@ function SentContacts({ contacts, removeContact }) {
 
 	const mapContacts = () => {
 		return contacts.map((contact) => (
-			<div>
-				<h6>Sent:</h6>
-
+			<div className="contact-card">
+				<h6>{contact.receiver.username}</h6>
 				<p>
 					<Button
 						onClick={() => handleClick(contact.id)}
 						variant="outline-danger"
 						size="sm"
 					>
-						{contact.receiver.username} X
+						X
 					</Button>
 				</p>
 			</div>
 		));
 	};
 
-	return <div>{contacts ? mapContacts() : null}</div>;
+	return (
+		<div>
+			{contacts ? (
+				<>
+					<h2>Add Contacts</h2>
+					<AddContactForm />
+					<hr></hr>
+					<h3>Contacts Awaiting Approval:</h3>
+					{mapContacts()}
+				</>
+			) : null}
+		</div>
+	);
 }
 
 const mapStateToProps = (state) => ({

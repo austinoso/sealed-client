@@ -4,23 +4,14 @@ import { Switch, Route, Link } from 'react-router-dom';
 import Main from './scenes/Main';
 import Register from './scenes/Register';
 import Login from './scenes/Login';
+import Home from './scenes/Home';
 
 function App() {
 	return (
 		<div className="App">
 			<Switch>
 				<Route exact path="/">
-					<h1>Welcome to Sealed</h1>
-					{localStorage.token ? (
-						<p>
-							You're signed in! <Link to="/app">View Chats</Link>
-						</p>
-					) : (
-						<p>
-							<Link to="/login">Login</Link> or{' '}
-							<Link to="/register">Register</Link>
-						</p>
-					)}
+					<Home />
 				</Route>
 				<Route
 					path="/app"

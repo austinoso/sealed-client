@@ -52,7 +52,7 @@ function AddContactForm({ addContact }) {
 						value={username}
 						onChange={(e) => setUsername(e.target.value)}
 					/>
-					<Button variant="primary" type="submit">
+					<Button className="primary-btn" variant="primary" type="submit">
 						Add
 					</Button>
 				</InputGroup>

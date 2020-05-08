@@ -35,6 +35,7 @@ export default function userInfoReducer(state = initialState, action) {
 				contacts: action.payload,
 			};
 		case 'REMOVE_CONTACT':
+			console.log(action);
 			return {
 				...state,
 				contacts: {

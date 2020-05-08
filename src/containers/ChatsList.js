@@ -20,8 +20,6 @@ export const ChatsList = ({ chats }) => {
 
 	return (
 		<div>
-			<h4>Current Chats</h4>
-
 			<div>
 				{chats.map((chat) => (
 					<ChatCard chat={chat} />
