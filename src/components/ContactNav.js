@@ -6,7 +6,7 @@ import Button from 'react-bootstrap/Button';
 
 export const ContactNav = ({ contacts }) => {
 	const pendingContacts = () => {
-		return contacts && contacts.received.length ? (
+		return contacts && contacts.received && contacts.received.length ? (
 			<Button size="sm" className="primary-btn">
 				{contacts.received.length}
 			</Button>
