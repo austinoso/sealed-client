@@ -14,7 +14,6 @@ export default function userInfoReducer(state = initialState, action) {
 				username: action.payload,
 			};
 		case 'SET_CHATS':
-			console.log('hit');
 			return {
 				...state,
 				chats: action.payload,
@@ -35,7 +34,6 @@ export default function userInfoReducer(state = initialState, action) {
 				contacts: action.payload,
 			};
 		case 'REMOVE_CONTACT':
-			console.log(action);
 			return {
 				...state,
 				contacts: {
@@ -80,6 +78,10 @@ export default function userInfoReducer(state = initialState, action) {
 			});
 
 			return { ...state, chats: [...cList] };
+
+		case 'SET_ACTIVE_CHAT':
+			console.log(action.chat);
+			return { ...state, activeChat: action.chat };
 
 		default:
 			return state;

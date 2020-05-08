@@ -1,10 +1,9 @@
-import React, { useEffect } from 'react';
-import Card from 'react-bootstrap/Card';
+import React from 'react';
 import { connect } from 'react-redux';
 
 import { fetchChatMessages } from '../redux/actions/chats';
 
-export function MessageArea({ messages }) {
+export function MessageArea({ messages, activeChat }) {
 	const messageDate = (createdAt) => {
 		const date = new Date(createdAt);
 
@@ -39,15 +38,17 @@ export function MessageArea({ messages }) {
 	return (
 		<div className="messages">
 			{messages ? viewMessages() : null}
-			<h3 className="text-muted text-center">
-				This is the start of the Messages
-			</h3>
+			<h4 className="text-muted text-center">
+				This is the beginning of your message history with{' '}
+				{activeChat ? activeChat.user : null}
+			</h4>
 		</div>
 	);
 }
 
 const mapStateToProps = (state) => ({
 	chats: state.chats,
+	activeChat: state.activeChat,
 });
 
 const mapDispatchToProps = (dispatch) => ({

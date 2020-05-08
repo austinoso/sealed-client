@@ -1,23 +1,10 @@
-import React, { useEffect, useLayoutEffect } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
-import { API_ROOT, HEADERS, cable } from '../constants/index';
 import { addChat } from '../redux/actions/chats';
 
-import { ChatCard } from '../components/ChatCard';
+import ChatCard from '../components/ChatCard';
 
 export const ChatsList = ({ chats }) => {
-	// const orderedChats = () => {
-	// 	return [...chats].sort((a, b) => {
-	// 		if (a.messages.length && b.messages.length) {
-	// 			console.log(a);
-	// 			return (
-	// 				Date.parse(a.messages[0].created_at) -
-	// 				Date.parse(b.messages[0].created_at)
-	// 			);
-	// 		}
-	// 	});
-	// };
-
 	return (
 		<div>
 			<div>
@@ -31,6 +18,7 @@ export const ChatsList = ({ chats }) => {
 
 const mapStateToProps = (state) => ({
 	chats: state.chats,
+	activeChat: state.activeChat,
 });
 
 const mapDispatchToProps = (dispatch) => ({

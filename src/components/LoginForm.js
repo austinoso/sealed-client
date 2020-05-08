@@ -8,6 +8,7 @@ export default function RegisterForm() {
 	const [username, setUsername] = useState();
 	const [password, setPassword] = useState();
 	const [success, setSuccess] = useState(false);
+	const [error, setError] = useState(null);
 
 	const setUser = ({ jwt, user }) => {
 		localStorage.setItem('token', jwt);
@@ -35,7 +36,7 @@ export default function RegisterForm() {
 		fetch(`${API_ROOT}/api/v1/login`, config)
 			.then((r) => r.json())
 			.then((token) =>
-				token.jwt ? setUser(token) : console.log('failed to create user')
+				token.jwt ? setUser(token) : setError('Incorrect Username or Password')
 			);
 	};
 
@@ -57,6 +58,7 @@ export default function RegisterForm() {
 						type="password"
 					/>
 				</Form.Group>
+				{error ? <p>{error}</p> : null}
 				<Button className="login-btn" type="submit">
 					Login
 				</Button>

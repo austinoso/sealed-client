@@ -33,12 +33,14 @@ function Contacts({ setContacts, contacts, addContact, removeContact }) {
 			{ channel: 'ContactsChannel' },
 			{
 				received: function (data) {
-					console.log(data);
-					if (!data.contact.status) {
-						addContact('received', data.contact);
+					if (data.action === 'DEL') {
+						removeContact('sent', data.contact.id);
+						removeContact('received', data.contact.id);
 					} else if (data.contact.status) {
 						addContact('current', data.contact);
 						removeContact('sent', data.contact.id);
+					} else if (data.contact.status === false) {
+						addContact('received', data.contact);
 					}
 				},
 			}

@@ -1,7 +1,7 @@
 .App {
 	/* position: absolute; */
-	overflow-y: hidden;
-	max-height: 100vh;
+	overflow: hidden;
+	height: 100vh;
 	/* min-width: 100vw; */
 }
 
@@ -109,6 +109,7 @@
 
 a:hover {
 	text-decoration: none;
+	color: #0ea7ac;
 }
 
 a {
@@ -123,8 +124,9 @@ a {
 .app-section {
 	width: 85vw;
 	/* min-width: 450px; */
-	padding: 25px 60px;
-	height: 100vh;
+	padding: 0px 60px;
+	height: 90vh;
+	max-height: 100;
 }
 
 .welcome {
@@ -132,23 +134,27 @@ a {
 	width: 50%;
 }
 
-.chat-info {
+.chat {
+	height: 100%;
 	display: flex;
-	justify-content: space-between;
+	flex-wrap: wrap;
 }
 
 .message-section {
-	height: 75vh;
+	height: 90%;
+	width: 100%;
 }
 
 .message-form {
-	margin-top: 10px;
-	margin-bottom: 10px;
+	padding-top: 10px;
+	height: 60px;
+	width: 100%;
 }
 
 .messages {
 	height: 100%;
-	overflow: scroll;
+	overflow-y: scroll;
+	overflow-x: hidden;
 	display: flex;
 	flex-direction: column-reverse;
 }
@@ -162,9 +168,16 @@ a {
 	background-color: #f5f5f5;
 }
 
+.chat-card-active {
+	background-color: #f5f5f5;
+	min-width: 100%;
+	padding: 15px;
+}
+
 .new-chat-btn {
 	display: flex;
 	justify-content: space-between;
+	padding: 6px 20px;
 }
 
 #nav-dropdown:active {
@@ -186,4 +199,20 @@ a {
 }
 .message-card:hover .message-time {
 	display: inline;
+}
+
+.chat-nav {
+	padding-left: 20px;
+	display: flex;
+	justify-content: space-between;
+}
+
+.accept-chat-content {
+	background: rgba(255, 255, 255, 0.5);
+	width: 80vw;
+	height: 100%;
+	position: fixed;
+	z-index: 2;
+	text-align: center;
+	margin-top: 15%;
 }

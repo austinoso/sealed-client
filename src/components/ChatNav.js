@@ -1,37 +1,35 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import Nav from 'react-bootstrap/Nav';
 import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
-export const ContactNav = ({ contacts }) => {
+import { removeChat } from '../redux/actions/chats';
+import { API_ROOT } from '../constants/index';
+
+export const ContactNav = ({ activeChat }) => {
+	const deleteChat = () => {
+		fetch(`${API_ROOT}/chats/${activeChat.id}`, { method: 'DELETE' });
+		removeChat(activeChat);
+	};
 	return (
-		<>
+		<div className="chat-nav">
+			<Nav.Item>
+				<Nav.Link>{activeChat ? <h4>@{activeChat.user}</h4> : null}</Nav.Link>
+			</Nav.Item>
 			<Nav.Item>
 				<Nav.Link>
-					<Link to="/app/contacts">Contacts</Link>
+					<Button onClick={deleteChat} variant="danger" size="sm">
+						Delete Chat
+					</Button>
 				</Nav.Link>
 			</Nav.Item>
-			<Nav.Item>
-				<Nav.Link eventKey="2" title="Item">
-					<Link to="/app/contacts/pending"></Link>
-				</Nav.Link>
-			</Nav.Item>
-			<Nav.Item>
-				<Nav.Link eventKey="3">
-					<Link to="/app/contacts/sent">
-						<Button size="sm" variant="danger">
-							Delete Chat
-						</Button>
-					</Link>
-				</Nav.Link>
-			</Nav.Item>
-		</>
+		</div>
 	);
 };
 
 const mapStateToProps = (state) => ({
-	contacts: state.contacts,
+	activeChat: state.activeChat,
 });
 
 const mapDispatchToProps = {};

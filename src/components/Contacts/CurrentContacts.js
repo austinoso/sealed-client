@@ -3,10 +3,10 @@ import { connect } from 'react-redux';
 import Button from 'react-bootstrap/Button';
 import { API_ROOT, HEADERS } from '../../constants/index';
 
-import { setContacts } from '../../redux/actions/contacts';
-import { removeContact } from '../../redux/actions/contacts';
+import { setContacts, removeContact } from '../../redux/actions/contacts';
 import { Redirect } from 'react-router-dom';
 import ButtonGroup from 'react-bootstrap/ButtonGroup';
+import AddContactForm from '../AddContactForm';
 
 function SentContacts({ contacts, removeContact, chats }) {
 	const [redirect, setRedirect] = useState(null);
@@ -47,15 +47,14 @@ function SentContacts({ contacts, removeContact, chats }) {
 	const mapContacts = () => {
 		return contacts.map((contact) => (
 			<>
-				<div className="contact-card">
+				<div
+					className="contact-card"
+					onClick={() => startChat(contactUser(contact))}
+				>
 					{contactUser(contact).username}
 					<p>
 						<ButtonGroup className="contact-btns">
-							<Button
-								className="primary-btn"
-								size="large"
-								onClick={() => startChat(contactUser(contact))}
-							>
+							<Button className="primary-btn" size="large">
 								<svg
 									class="bi bi-chat-fill"
 									width="1.2em"
@@ -100,10 +99,21 @@ function SentContacts({ contacts, removeContact, chats }) {
 		));
 	};
 
+	const displayContacts = () =>
+		contacts.length ? (
+			mapContacts()
+		) : (
+			<>
+				<h2>You haven't added anyone to your contact list yet.</h2>
+				<p>Get started by adding one!</p>
+				<AddContactForm />
+			</>
+		);
+
 	return (
 		<div>
 			{redirect ? <Redirect to={`/app/chat/${redirect}`} /> : null}
-			{contacts ? mapContacts() : null}
+			{contacts ? displayContacts() : null}
 		</div>
 	);
 }

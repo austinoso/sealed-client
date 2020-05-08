@@ -18,7 +18,6 @@ import { API_ROOT, HEADERS, cable } from '../constants/index';
 import Button from 'react-bootstrap/Button';
 
 export function Main({
-	match,
 	setChats,
 	addChat,
 	chats,
@@ -39,10 +38,7 @@ export function Main({
 			{ channel: 'MessagesChannel', id: chat.id },
 			{
 				received: (message) => {
-					{
-						console.log(message);
-						addMessages(chat, [message]);
-					}
+					addMessages(chat, [message]);
 				},
 			}
 		);
@@ -73,11 +69,9 @@ export function Main({
 			{ channel: 'ChatsChannel' },
 			{
 				received: function (data) {
-					console.log(data);
 					if (data.action === 'DEL') {
 						removeChat(data.chat);
 					} else if (data.action === 'UPDATE') {
-						console.log(data);
 						acceptChat(data.chat);
 					} else {
 						addChat({
@@ -147,11 +141,7 @@ export function Main({
 			</>
 		);
 	} else {
-		return (
-			<>
-				<Redirect to={'/login'} />
-			</>
-		);
+		return <Redirect to={'/login'} />;
 	}
 }
 

@@ -42,3 +42,7 @@ export const addMessages = (chat, messages) => {
 export const addNewChat = (chat) => {
 	return { type: 'ADD_NEW_CHAT', chat };
 };
+
+export const setActiveChat = (chat) => {
+	return { type: 'SET_ACTIVE_CHAT', chat };
+};

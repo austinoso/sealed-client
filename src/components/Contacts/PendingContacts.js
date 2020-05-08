@@ -5,6 +5,7 @@ import ButtonGroup from 'react-bootstrap/ButtonGroup';
 import { API_ROOT, HEADERS } from '../../constants/index';
 
 import { addContact, removeContact } from '../../redux/actions/contacts';
+import AddContactForm from '../AddContactForm';
 
 function SentContacts({ contacts, addContact, removeContact }) {
 	const acceptContact = (chatId) => {
@@ -82,12 +83,17 @@ function SentContacts({ contacts, addContact, removeContact }) {
 		));
 	};
 
-	return (
-		<div>
-			<h3>Pending</h3>
-			{contacts ? <>{mapContacts()}</> : null}
-		</div>
-	);
+	const displayContacts = () =>
+		contacts.length ? (
+			mapContacts()
+		) : (
+			<>
+				<h2>No Pending Contact Requests</h2>
+				<AddContactForm />
+			</>
+		);
+
+	return <div>{contacts ? displayContacts() : null}</div>;
 }
 
 const mapStateToProps = (state) => ({

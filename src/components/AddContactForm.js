@@ -7,9 +7,9 @@ import Button from 'react-bootstrap/Button';
 import InputGroup from 'react-bootstrap/InputGroup';
 import { API_ROOT, HEADERS } from '../constants/index';
 
-function AddContactForm({ addContact }) {
+function AddContactForm({ addContact, contacts }) {
 	const [username, setUsername] = useState();
-	const [error, setError] = useState();
+	const [displayMsg, setDisplayMsg] = useState();
 
 	const postRequest = () => {
 		const config = {
@@ -27,20 +27,49 @@ function AddContactForm({ addContact }) {
 			.then((r) => r.json())
 			.then((contact) => {
 				if (contact.receiver[0] === 'must exist') {
-					setError(
+					setDisplayMsg(
 						"User doesn't exist, Please make sure you're using proper case"
 					);
 				} else {
-					// console.log(contact);
 					addContact('sent', contact);
+					setDisplayMsg('Contact Request Sent!');
 				}
 			});
 	};
 
+	const validContact = () => {
+		let allContacts = [];
+
+		if (contacts.recevied) {
+			allContacts = allContacts.concat(contacts.recevied);
+		}
+		if (contacts.current) {
+			allContacts = allContacts.concat(contacts.current);
+		}
+		if (contacts.sent) {
+			allContacts = allContacts.concat(contacts.sent);
+		}
+
+		const dupContact = allContacts.find(
+			(contact) =>
+				contact.receiver.username || contact.sender.username === username
+		);
+
+		if (dupContact || username === localStorage.username) {
+			return false;
+		} else {
+			return true;
+		}
+	};
+
 	const handleSubmit = (e) => {
 		e.preventDefault();
-		setUsername('');
-		postRequest();
+		if (validContact()) {
+			setUsername('');
+			postRequest();
+		} else {
+			setDisplayMsg('Invalid Contact Request');
+		}
 	};
 
 	return (
@@ -57,13 +86,13 @@ function AddContactForm({ addContact }) {
 					</Button>
 				</InputGroup>
 			</Form>
-			{error ? <p>{error}</p> : null}
+			{displayMsg ? <p>{displayMsg}</p> : null}
 		</>
 	);
 }
 
 const mapStateToProps = (state) => ({
-	chats: state.chats,
+	contacts: state.contacts,
 });
 
 const mapDispatchToProps = (dispatch) => ({

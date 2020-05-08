@@ -30,7 +30,7 @@ export const Navbar = () => {
 				</NavDropdown>
 			</div>
 			<Route path={`/app/contacts`} render={() => <ContactNav />} />
-			{/* <Route path={`/app/chat`} render={() => <ChatNav />} /> */}
+			<Route path={`/app/chat`} render={() => <ChatNav />} />
 		</Nav>
 	);
 };

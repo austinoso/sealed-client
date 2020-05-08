@@ -1,11 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { updateChat } from '../redux/actions/chats';
-
-import Card from 'react-bootstrap/Card';
 
 export const ChatCard = ({ chat, activeChat }) => {
+	console.log(activeChat);
 	const chatUser = () => {
 		return chat.initiator.username === localStorage.username
 			? chat.recipient
@@ -22,7 +20,13 @@ export const ChatCard = ({ chat, activeChat }) => {
 
 	return (
 		<Link to={`/app/chat/${chat.id}`}>
-			<div className="chat-card">
+			<div
+				className={
+					activeChat && chat.id === activeChat.id
+						? 'chat-card-active'
+						: 'chat-card'
+				}
+			>
 				<h6>{chatUser().username}</h6>
 				<p className="text-muted">{lastMessage()}</p>
 			</div>
@@ -34,8 +38,6 @@ const mapStateToProps = (state) => ({
 	activeChat: state.activeChat,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-	updateChat: (chat, newChat) => dispatch(updateChat(chat, newChat)),
-});
+const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(mapStateToProps, mapDispatchToProps)(ChatCard);
+export default connect(mapStateToProps)(ChatCard);
