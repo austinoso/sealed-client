@@ -76,7 +76,7 @@ export default function userInfoReducer(state = initialState, action) {
 			return { ...state, chats: [...cList] };
 
 		case 'SET_ACTIVE_CHAT':
-			return { ...state, activeChat: action.chat };
+				return { ...state, activeChat: action.chat };
 
 		default:
 			return state;
