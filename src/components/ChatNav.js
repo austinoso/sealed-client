@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import Nav from 'react-bootstrap/Nav';
-import { Link } from 'react-router-dom';
 import Button from 'react-bootstrap/Button';
 
 import { removeChat } from '../redux/actions/chats';
@@ -9,8 +8,12 @@ import { API_ROOT } from '../constants/index';
 
 export const ContactNav = ({ activeChat }) => {
 	const deleteChat = () => {
-		fetch(`${API_ROOT}/chats/${activeChat.id}`, { method: 'DELETE' });
-		removeChat(activeChat);
+		let r = window.confirm('Are you sure?');
+
+		if (r) {
+			fetch(`${API_ROOT}/chats/${activeChat.id}`, { method: 'DELETE' });
+			removeChat(activeChat);
+		}
 	};
 	return (
 		<div className="chat-nav">

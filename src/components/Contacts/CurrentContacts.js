@@ -32,10 +32,14 @@ function SentContacts({ contacts, removeContact, chats }) {
 	};
 
 	const removeFromContacts = (id) => {
-		fetch(`${API_ROOT}/contacts/${id}`, {
-			method: 'DELETE',
-			headers: HEADERS,
-		}).then(removeContact('current', id));
+		let r = window.confirm('Are you sure?');
+
+		if (r) {
+			fetch(`${API_ROOT}/contacts/${id}`, {
+				method: 'DELETE',
+				headers: HEADERS,
+			}).then(removeContact('current', id));
+		}
 	};
 
 	const contactUser = (contact) => {
@@ -47,14 +51,15 @@ function SentContacts({ contacts, removeContact, chats }) {
 	const mapContacts = () => {
 		return contacts.map((contact) => (
 			<>
-				<div
-					className="contact-card"
-					onClick={() => startChat(contactUser(contact))}
-				>
+				<div className="contact-card">
 					{contactUser(contact).username}
 					<p>
 						<ButtonGroup className="contact-btns">
-							<Button className="primary-btn" size="large">
+							<Button
+								className="primary-btn"
+								size="large"
+								onClick={() => startChat(contactUser(contact))}
+							>
 								<svg
 									class="bi bi-chat-fill"
 									width="1.2em"

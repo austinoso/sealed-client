@@ -3,10 +3,6 @@ const initialState = {
 };
 
 export default function userInfoReducer(state = initialState, action) {
-	const getChatIndex = (chat) => {
-		return state.chats.findIndex((c) => c.id === chat.id);
-	};
-
 	switch (action.type) {
 		case 'SET_USERNAME':
 			return {
@@ -80,7 +76,6 @@ export default function userInfoReducer(state = initialState, action) {
 			return { ...state, chats: [...cList] };
 
 		case 'SET_ACTIVE_CHAT':
-			console.log(action.chat);
 			return { ...state, activeChat: action.chat };
 
 		default:

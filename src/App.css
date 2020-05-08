@@ -16,6 +16,10 @@
 	justify-content: space-between;
 }
 
+.contacts {
+	padding-top: 35px;
+}
+
 .main-reduced {
 	margin-right: 20%;
 }
@@ -29,21 +33,39 @@
 	box-shadow: 0;
 }
 
-.primary-btn {
+.btn-primary {
 	background-color: #14bdc3;
 	border: 0;
 }
 
-.primary-btn:hover {
+.btn-primary:hover {
 	background-color: #0ea7ac;
 	border: 0;
 	box-shadow: 0;
 }
 
-.primary-btn:active {
+.btn-primary:active {
 	background-color: #0ea7ac;
 	border: 0;
 	box-shadow: 0;
+}
+
+.btn-secondary {
+	border: 0;
+	background-color: white;
+	color: black;
+}
+
+.btn-secondary:hover {
+	border: 0;
+	background-color: #f3f3f3;
+	color: black;
+}
+
+.btn-secondary:active {
+	border: 0;
+	background-color: #f3f3f3;
+	color: black;
 }
 
 /* .contact-btns {
@@ -178,6 +200,7 @@ a {
 	display: flex;
 	justify-content: space-between;
 	padding: 6px 20px;
+	margin: 5px;
 }
 
 #nav-dropdown:active {

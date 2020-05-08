@@ -40,4 +40,4 @@ const mapStateToProps = (state) => ({
 
 const mapDispatchToProps = (dispatch) => ({});
 
-export default connect(mapStateToProps)(ChatCard);
+export default connect(mapStateToProps, mapDispatchToProps)(ChatCard);

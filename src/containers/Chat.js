@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { connect } from 'react-redux';
-import Button from 'react-bootstrap/Button';
-import { Link, Redirect } from 'react-router-dom';
+import { Redirect } from 'react-router-dom';
 import MessageArea from './MessageArea';
 import NewMessageForm from '../components/NewMessageForm';
 import AcceptChatPrompt from '../components/AcceptChatPrompt';
@@ -11,7 +10,6 @@ import {
 	updateChat,
 	setActiveChat,
 } from '../redux/actions/chats';
-import { API_ROOT } from '../constants/index';
 
 function Chat({ match, chats, fetchMessages, setActiveChat }) {
 	const activeChat = chats.find(
@@ -22,11 +20,6 @@ function Chat({ match, chats, fetchMessages, setActiveChat }) {
 		setActiveChat(activeChat);
 		if (!activeChat.messages.length) fetchMessages(activeChat);
 	}, [match.params.chatId]);
-
-	const deleteChat = () => {
-		fetch(`${API_ROOT}/chats/${activeChat.id}`, { method: 'DELETE' });
-		removeChat(activeChat);
-	};
 
 	if (activeChat) {
 		return (

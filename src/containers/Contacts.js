@@ -34,8 +34,10 @@ function Contacts({ setContacts, contacts, addContact, removeContact }) {
 			{
 				received: function (data) {
 					if (data.action === 'DEL') {
+						console.log(data);
 						removeContact('sent', data.contact.id);
 						removeContact('received', data.contact.id);
+						removeContact('current', data.contact.id);
 					} else if (data.contact.status) {
 						addContact('current', data.contact);
 						removeContact('sent', data.contact.id);

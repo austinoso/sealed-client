@@ -52,7 +52,8 @@ function AddContactForm({ addContact, contacts }) {
 
 		const dupContact = allContacts.find(
 			(contact) =>
-				contact.receiver.username || contact.sender.username === username
+				contact.receiver.username === username ||
+				contact.sender.username === username
 		);
 
 		if (dupContact || username === localStorage.username) {
@@ -64,6 +65,7 @@ function AddContactForm({ addContact, contacts }) {
 
 	const handleSubmit = (e) => {
 		e.preventDefault();
+		console.log(username);
 		if (validContact()) {
 			setUsername('');
 			postRequest();
