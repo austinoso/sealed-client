@@ -11,6 +11,76 @@
 	}
 }
 
+.contact-card {
+	display: flex;
+	justify-content: space-between;
+}
+
+.main-reduced {
+	margin-right: 20%;
+}
+
+.accept-btn {
+	padding: 5px 20px;
+}
+
+.accept-btn:hover {
+	background-color: #0ea7ac;
+	box-shadow: 0;
+}
+
+.primary-btn {
+	background-color: #14bdc3;
+	border: 0;
+}
+
+.primary-btn:hover {
+	background-color: #0ea7ac;
+	border: 0;
+	box-shadow: 0;
+}
+
+.primary-btn:active {
+	background-color: #0ea7ac;
+	border: 0;
+	box-shadow: 0;
+}
+
+/* .contact-btns {
+	float: right;
+} */
+
+.icon {
+	vertical-align: inherit;
+}
+
+.home {
+	height: 100vh;
+	position: relative;
+}
+
+.login-reg {
+	max-width: 450px;
+	margin: 0 auto;
+	margin-top: 80px;
+	padding: 20px;
+}
+
+.login-btn {
+	margin: 0 auto;
+	padding: 10px 40px;
+	border: 0;
+	background-color: black;
+}
+
+.center-vertical {
+	margin: 0;
+	position: absolute;
+	top: 50%;
+	-ms-transform: translateY(-50%);
+	transform: translateY(-50%);
+}
+
 .main {
 	display: grid;
 	grid-template-columns: 1fr 4fr;
@@ -20,10 +90,29 @@
 .side-bar {
 	max-width: 15vw;
 	min-width: 200px;
-	padding: 15px;
-	background-color: #f8f8f8;
 	display: flex;
 	flex-direction: column;
+	border-right: 1px solid #f5f5f5;
+}
+
+.nav-head {
+	max-width: 15vw;
+	min-width: 200px;
+	width: 100%;
+}
+
+.nav {
+	border-bottom: 1px solid #f5f5f5;
+	height: 50px;
+	padding: 4px;
+}
+
+a:hover {
+	text-decoration: none;
+}
+
+a {
+	color: black;
 }
 
 .scroll {
@@ -34,7 +123,7 @@
 .app-section {
 	width: 85vw;
 	/* min-width: 450px; */
-	padding: 15px;
+	padding: 25px 60px;
 	height: 100vh;
 }
 
@@ -44,7 +133,8 @@
 }
 
 .chat-info {
-	/* Info */
+	display: flex;
+	justify-content: space-between;
 }
 
 .message-section {
@@ -61,4 +151,39 @@
 	overflow: scroll;
 	display: flex;
 	flex-direction: column-reverse;
+}
+
+.chat-card {
+	min-width: 100%;
+	padding: 15px;
+}
+
+.chat-card:hover {
+	background-color: #f5f5f5;
+}
+
+.new-chat-btn {
+	display: flex;
+	justify-content: space-between;
+}
+
+#nav-dropdown:active {
+	background-color: #0ea7ac;
+	border: 0;
+	box-shadow: 0;
+}
+
+.menu-top {
+	padding: 10px;
+}
+.message-card {
+	line-height: 1.2em;
+	color: #474747;
+}
+
+.message-time {
+	display: none;
+}
+.message-card:hover .message-time {
+	display: inline;
 }

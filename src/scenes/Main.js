@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Link } from 'react-router-dom';
-import Button from 'react-bootstrap/Button';
 
 import { connect } from 'react-redux';
 import {
@@ -14,7 +13,9 @@ import {
 
 import MainView from '../containers/MainView';
 import ChatsList from '../containers/ChatsList';
+import Navbar from '../containers/Navbar';
 import { API_ROOT, HEADERS, cable } from '../constants/index';
+import Button from 'react-bootstrap/Button';
 
 export function Main({
 	match,
@@ -104,16 +105,29 @@ export function Main({
 		return (
 			<>
 				<div className="side-bar">
-					<div className="top">
-						<Link to={'/app'}>
-							<h3>Hello! @{localStorage.username}</h3>
-						</Link>
-					</div>
-					<hr></hr>
+					<div className="top"></div>
 					<div id="menu">
-						<Link to={'/app'} className="btn btn-primary">
-							Start a New Chat
-						</Link>
+						<div class="menu-top">
+							<Link to={'/app/contacts'}>
+								<Button className="primary-btn new-chat-btn" block>
+									Create Chat{' '}
+									<svg
+										class="bi bi-plus-circle-fill icon"
+										width="1.3em"
+										height="1.5em"
+										viewBox="0 0 16 16"
+										fill="currentColor"
+										xmlns="http://www.w3.org/2000/svg"
+									>
+										<path
+											fill-rule="evenodd"
+											d="M16 8A8 8 0 110 8a8 8 0 0116 0zM8.5 4a.5.5 0 00-1 0v3.5H4a.5.5 0 000 1h3.5V12a.5.5 0 001 0V8.5H12a.5.5 0 000-1H8.5V4z"
+											clip-rule="evenodd"
+										/>
+									</svg>
+								</Button>
+							</Link>
+						</div>
 						<div className="scroll">
 							<ChatsList />
 						</div>
@@ -127,6 +141,8 @@ export function Main({
 	if (localStorage.token) {
 		return (
 			<>
+				<Navbar />
+
 				<div className="main">{chats ? render() : null}</div>
 			</>
 		);

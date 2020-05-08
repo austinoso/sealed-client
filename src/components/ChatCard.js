@@ -21,12 +21,12 @@ export const ChatCard = ({ chat, activeChat }) => {
 	};
 
 	return (
-		<Card>
-			<Card.Body>
-				<Link to={`/app/chat/${chat.id}`}>{chatUser().username}</Link>
-				<p>{lastMessage()}</p>
-			</Card.Body>
-		</Card>
+		<Link to={`/app/chat/${chat.id}`}>
+			<div className="chat-card">
+				<h6>{chatUser().username}</h6>
+				<p className="text-muted">{lastMessage()}</p>
+			</div>
+		</Link>
 	);
 };
 

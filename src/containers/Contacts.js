@@ -1,14 +1,19 @@
 import React, { useEffect } from 'react';
+import { connect } from 'react-redux';
+import { Route } from 'react-router-dom';
+
 import SentContacts from '../components/Contacts/SentContacts';
 import CurrentContacts from '../components/Contacts/CurrentContacts';
-
-import { connect } from 'react-redux';
-import { setContacts, addContact } from '../redux/actions/contacts';
-
-import { API_ROOT, HEADERS, cable } from '../constants/index';
 import PendingContacts from '../components/Contacts/PendingContacts';
 
-function Contacts({ setContacts, contacts, addContact }) {
+import {
+	setContacts,
+	addContact,
+	removeContact,
+} from '../redux/actions/contacts';
+import { API_ROOT, HEADERS, cable } from '../constants/index';
+
+function Contacts({ setContacts, contacts, addContact, removeContact }) {
 	const setData = (user) => {
 		setContacts({
 			current: user.contacts,
@@ -33,6 +38,7 @@ function Contacts({ setContacts, contacts, addContact }) {
 						addContact('received', data.contact);
 					} else if (data.contact.status) {
 						addContact('current', data.contact);
+						removeContact('sent', data.contact.id);
 					}
 				},
 			}
@@ -40,16 +46,25 @@ function Contacts({ setContacts, contacts, addContact }) {
 	}, []);
 
 	return (
-		<div>
-			<h5>Contacts:</h5>
+		<div className="main-reduced">
 			{contacts ? (
-				<>
-					<PendingContacts />
-					<hr></hr>
-					<CurrentContacts />
-					<hr></hr>
-					<SentContacts />
-				</>
+				<div className="contacts">
+					<Route
+						exact
+						path={`/app/contacts/pending`}
+						render={(routerProps) => <PendingContacts />}
+					/>
+					<Route
+						exact
+						path={`/app/contacts/sent`}
+						render={(routerProps) => <SentContacts />}
+					/>
+					<Route
+						exact
+						path={`/app/contacts`}
+						render={(routerProps) => <CurrentContacts />}
+					/>
+				</div>
 			) : null}
 		</div>
 	);
@@ -62,6 +77,7 @@ const mapStateToProps = (state) => ({
 const mapDispatchToProps = (dispatch) => ({
 	setContacts: (contacts) => dispatch(setContacts(contacts)),
 	addContact: (list, contact) => dispatch(addContact(list, contact)),
+	removeContact: (list, contact) => dispatch(removeContact(list, contact)),
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Contacts);

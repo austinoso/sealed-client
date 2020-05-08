@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
 import Form from 'react-bootstrap/Form';
+import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import { API_ROOT } from '../constants/index';
 import { Redirect } from 'react-router-dom';
@@ -44,16 +44,21 @@ export default function RegisterForm() {
 			{success ? <Redirect to={'/app'} /> : null}
 
 			<Form onSubmit={handleSubmit}>
-				<Form.Control
-					placeholder="Username"
-					onChange={(e) => setUsername(e.target.value)}
-				/>
-				<Form.Control
-					placeholder="Password"
-					onChange={(e) => setPassword(e.target.value)}
-				/>
-				<Button variant="primary" type="submit">
-					Submit
+				<Form.Group>
+					<Form.Control
+						placeholder="Username"
+						onChange={(e) => setUsername(e.target.value)}
+					/>
+				</Form.Group>
+				<Form.Group>
+					<Form.Control
+						placeholder="Password"
+						onChange={(e) => setPassword(e.target.value)}
+						type="password"
+					/>
+				</Form.Group>
+				<Button className="login-btn" type="submit">
+					Login
 				</Button>
 			</Form>
 		</>

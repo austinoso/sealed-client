@@ -1,10 +1,11 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import { Route, Redirect } from 'react-router-dom';
+import { Route } from 'react-router-dom';
 
 import Chat from '../containers/Chat';
 import Welcome from '../components/Welcome';
+import Contacts from '../containers/Contacts';
 
 export const MainView = () => {
 	return (
@@ -15,6 +16,7 @@ export const MainView = () => {
 				render={(routerProps) => <Chat {...routerProps} />}
 			/>
 			<Route exact path={`/app`} render={() => <Welcome />} />
+			<Route path={`/app/contacts`} render={() => <Contacts />} />
 		</div>
 	);
 };

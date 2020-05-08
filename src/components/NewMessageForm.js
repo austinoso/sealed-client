@@ -5,7 +5,7 @@ import Form from 'react-bootstrap/Form';
 
 import { API_ROOT, HEADERS } from '../constants/index';
 
-export default function NewMessageForm({ chatId }) {
+export default function NewMessageForm({ chat }) {
 	const [message, setMessage] = useState();
 
 	const postMessage = () => {
@@ -14,7 +14,7 @@ export default function NewMessageForm({ chatId }) {
 			headers: HEADERS,
 			body: JSON.stringify({
 				message: {
-					chat_id: chatId,
+					chat_id: chat.id,
 					user_id: localStorage.userId,
 					content: message,
 				},
@@ -36,13 +36,10 @@ export default function NewMessageForm({ chatId }) {
 				<InputGroup controlId="formNewMessage">
 					<Form.Control
 						type="textarea"
-						placeholder="New Message"
+						placeholder={`Message @${chat.user}`}
 						value={message}
 						onChange={(e) => setMessage(e.target.value)}
 					/>
-					<Button type="submit" variant="primary">
-						Submit
-					</Button>
 				</InputGroup>
 			</Form>
 		</div>

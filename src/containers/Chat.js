@@ -31,7 +31,7 @@ function Chat({ match, chats, fetchMessages }) {
 			<div className="chat">
 				<>
 					<div className="chat-info">
-						<h1>Chat with: {activeChat.user}</h1>
+						<h1>{activeChat.user}</h1>
 						<Link to="/app">
 							<Button onClick={deleteChat} variant="danger" size="sm">
 								Delete Chat
@@ -44,7 +44,7 @@ function Chat({ match, chats, fetchMessages }) {
 							<div className="message-section">
 								<MessageArea messages={activeChat.messages} />
 							</div>
-							<NewMessageForm chatId={activeChat.id} />
+							<NewMessageForm chat={activeChat} />
 						</>
 					) : (
 						<AcceptChatPrompt chat={activeChat} />
