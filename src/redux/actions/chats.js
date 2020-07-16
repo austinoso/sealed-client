@@ -23,7 +23,7 @@ export const acceptChat = (chat) => {
 export function fetchChatMessages(chat) {
 	return (dispatch) => {
 		dispatch({ type: 'START_ADDING_MESSAGES_REQUEST' });
-		fetch(`${API_ROOT}/chats/${chat.id}/messages`)
+		fetch(`${API_ROOT}/chats/${chat.uuid}/messages`)
 			.then((r) => r.json())
 			.then((fetchedChat) =>
 				dispatch({
