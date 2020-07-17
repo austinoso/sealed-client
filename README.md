@@ -1,7 +1,7 @@
 ### Sealed Messaging App 
 
-[Sealed Backend](https://github.com/austinoso/capstone-messaging-api)
-[Live Demo](https://sealed-client.herokuapp.com/)
+- [Sealed Backend](https://github.com/austinoso/capstone-messaging-api)
+- [Live Demo](https://sealed-client.herokuapp.com/)
 
 Sealed is a concept messaging app I developed as my capstone project for Flatiron School.
 
