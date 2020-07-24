@@ -9,4 +9,4 @@ Sealed takes advantage of single use "burner chats" designed increase security b
 
 ## Technologies
 * React.js
-* React Boostrap
+* React Bootstrap
